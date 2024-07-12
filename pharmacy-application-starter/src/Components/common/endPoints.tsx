@@ -6,3 +6,4 @@ export class EndPoints {
   static FIND_PATIENT_BY_ID = "/patient/{patientId}";
   static FIND_PATIENT_HEADER_BY_UHID = "/patient/uhid/{uhid}";
 }
+
