@@ -1,0 +1,24 @@
+.card {
+  height: 100px !important;
+  padding: 8px !important;
+}
+
+.font-label {
+  font-size: 18px;
+  font-weight: 700 !important;
+}
+
+.col-1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.close-search {
+  display: flex !important;
+  float: right !important;
+}
+
+.close-class, .search-class {
+   cursor: pointer;
+}

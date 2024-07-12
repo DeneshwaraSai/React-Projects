@@ -1,0 +1,42 @@
+.width-280 {
+  width: 280px; /* adjust the value to your needs */
+}
+
+.width-90 {
+  width: 90px;
+}
+
+.width-140 {
+  width: 140px;
+}
+
+.gap-between {
+  margin-left: 5px;
+}
+
+.mat-card {
+  padding: 12px;
+}
+
+.button {
+  display: flex;
+  justify-content: end;
+}
+
+.button-align {
+  padding: 12px;
+}
+
+.col {
+  padding: 15px !important;
+}
+
+.snackbar-container {
+  background-color: #2ecc71;
+  margin-top: 50px ;
+}
+
+.alert-error {
+  margin-bottom: 6px;
+  margin-top: 6px;
+}

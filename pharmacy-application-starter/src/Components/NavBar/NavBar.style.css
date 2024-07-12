@@ -1,32 +1,9 @@
-JavaScript - 'this' keyword, filter, map and reduce
-ES6 - let & const, arrow functions, template literals, default parameters, object literals, rest and
-spread operators and destructuring assignment.
-
-sudo npx --yes vscode-bisect@latest
-
-netstat -vanp tcp | grep 3000
-lsof -i tcp:3000
-
-/Users/denesh/Desktop/IIT Chicago/Sem 1/CC/Key pairs/KP_JAN_31.pem
-
-sudo chmod -R g+rwX - When getting permission issues, use this
-
-https://www.youtube.com/watch?v=IathdVB65Lw - dashboard  
-
-sudo npx create-react-app react-redux
-sudo chmod -R g+rwX 
-sudo chown -R denesh react-redux
-
-lsof -i tcp:3000
-kill -9 14684
-
-
 .navbar {
   background-color: #0e7fe1; /* #060b26; */
   height: 68px;
   display: flex;
-  justify-content: start;
-  align-items: center;
+  justify-content: end;
+  align-items: end;
 }
 
 .menu-bars {
@@ -105,15 +82,31 @@ span {
 
 .search-input {
   background-color: #fff;
+  padding: 0;
+  margin: 0;
+  border-radius: 6px;
+  outline: none;
+  border: none;
+}
+
+/* .search-input {
+  margin-top: 2px;
+  justify-content: center;
+  background-color: #fff;
   padding: 4px;
   border-radius: 8px;
-  font-size: 14px;
   padding-left: 10px;
+  padding-right: 10px;
   border-radius: 4px;
   border: none;
-  outline: none;
+  outline: none; 
+}
+
+.small-placeholder::placeholder {
+  font-size: 12px;
 }
 
 .profile-name {
   padding: 12px;
 }
+  */
