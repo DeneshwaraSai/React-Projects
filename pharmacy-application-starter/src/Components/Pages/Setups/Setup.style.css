@@ -1,0 +1,9 @@
+.col-20 {
+  padding: 20px;
+  flex: 0 0 20%;
+  max-width: 20%; 
+}
+
+.item-title {
+  padding: 12px;
+}

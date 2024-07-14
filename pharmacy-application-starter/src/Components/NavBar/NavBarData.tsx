@@ -1,11 +1,9 @@
-// import React from "react";
-// import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
 import * as MdIcons from "react-icons/md";
 import { NavigationType } from "./NavigationTypes";
 
-export const SideBarData:NavigationType[] = [
+export const SideBarData: NavigationType[] = [
   {
     title: "Home",
     resourceId: "",
@@ -46,6 +44,13 @@ export const SideBarData:NavigationType[] = [
     resourceId: "",
     path: "/message",
     icon: <MdIcons.MdMessage />,
+    cName: "nav-text",
+  },
+  {
+    title: "Setups",
+    resourceId: "",
+    path: "Setups",
+    icon: <IoIcons.IoMdSettings />,
     cName: "nav-text",
   },
 ];
