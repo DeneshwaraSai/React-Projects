@@ -1,7 +1,9 @@
-export const patientHeaderAction = (patientHeader = {}) => {
+import { getSessionStorageWithPatientHeader } from "./PatientHeader.reducer";
+
+export const patientHeaderAction = (patientHeader = null) => {
   return { 
     type: "header" , 
-    payload: patientHeader, 
+    payload: patientHeader ? patientHeader : getSessionStorageWithPatientHeader("patientHeader"), 
     hasPatientHeader: true 
   };
 };

@@ -18,6 +18,7 @@ function App() {
           <NavigationBar />
           <Routes>
             <Route path="/" Component={Home} />
+            <Route path="/home" Component={Home} />
             <Route path="/PatientRegistration" Component={PatientReg} />
             <Route path="/inventory" Component={InventoryDetails} />
             <Route path="/order" Component={Order} />

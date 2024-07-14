@@ -1,5 +1,5 @@
-export type PatientHeader = {
-  patientId:number;
+export type PatientHeaderContext = {
+  patientId: number | null;
   firstName: string;
   lastName: string;
   age: number;
@@ -8,10 +8,11 @@ export type PatientHeader = {
   orderNumber: string;
   orderStatus: string;
   billStatus: string;
+  phoneNumber: string;
 };
 
 export type PatientAction = {
   type: string;
-  payload: PatientHeader;
-  hasPatientHeader: boolean
+  payload: PatientHeaderContext;
+  hasPatientHeader: boolean;
 };

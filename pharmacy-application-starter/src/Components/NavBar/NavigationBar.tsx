@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IconContext } from "react-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SideBarData } from "./NavBarData";
 import "./NavBar.style.css";
 import { Autocomplete, Avatar, Stack, TextField } from "@mui/material";
@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { patientHeaderAction } from "../Header/PatientHeader.actions";
 
 function NavigationBar() {
+  const navigate = useNavigate();
   const [username, setUserName] = useState("Deneshwara Sai");
   const [sidebar, setSidebar] = useState(false);
   const [patientDropDown, setPatientDropDown] = useState<AutoCompleteType[]>(
@@ -25,10 +26,14 @@ function NavigationBar() {
   };
 
   const inputSearch = (value: string) => {
+    setPatientDropDown(() => []);
+
     console.log(value);
     if (value.length > 2) {
+      setPatientDropDown([]);
+      console.log((PHARMACY_HOST_NAME + EndPoints.SEARCH_PATIENT_BY_NAME).replace("{value}", value))
       axios
-        .get(`http://localhost:8080/patient/search/${value}`)
+        .get((PHARMACY_HOST_NAME + EndPoints.SEARCH_PATIENT_BY_NAME).replace("{value}", value))
         .then((res: AxiosResponse<PatientSearch[]>) => {
           console.log(res.data);
 
@@ -58,6 +63,7 @@ function NavigationBar() {
       .then((res) => {
         console.log(res.data);
         dispatch(patientHeaderAction(res.data));
+        navigate("/home");
       })
       .catch((error) => {
         console.log(error);
@@ -83,7 +89,7 @@ function NavigationBar() {
                 patientDropDown.map((item, index) => {
                   return (
                     <li key={index} onClick={() => handleOnClick(item.value)}>
-                      {item.label}
+                      {item.label} - {item.value}
                     </li>
                   );
                 })
@@ -97,10 +103,6 @@ function NavigationBar() {
                 />
               )}
             />
-
-            {/* <div className="stretch-input">
-             <input placeholder="search for name and phone number" type="text"  className="search-input small-placeholder" /> 
-            </div> */}
 
             <div style={{ display: "flex", alignItems: "center" }}>
               <Avatar />

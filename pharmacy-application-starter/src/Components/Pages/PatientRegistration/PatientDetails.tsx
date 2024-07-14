@@ -14,7 +14,6 @@ import {
 import { gender } from "./patient.constants";
 import { Patient } from "./patient.type";
 import axios from "axios";
-import PatientHeader from "../../Header/PatientHeader";
 import { EndPoints } from "../../common/endPoints";
 import { ErrorMessage, SnackbarType } from "../../common/GlobalTypes";
 
@@ -162,7 +161,9 @@ function PatientDetails() {
   };
 
   const alertClose = (index: number) => {
-    const message = errorMessage.messageList.filter((message, i) => i !== index);
+    const message = errorMessage.messageList.filter(
+      (message, i) => i !== index
+    );
     setErrorMessage({
       ...errorMessage,
       messageList: message,
@@ -192,7 +193,7 @@ function PatientDetails() {
         </Snackbar>
       </div>
 
-      <PatientHeader />
+      {/* <PatientHeader patientHeader={patientHeader} /> */}
 
       {errorMessage.show &&
         errorMessage.messageList.map((message: string, index: number) => {
