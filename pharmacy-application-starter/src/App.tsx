@@ -9,9 +9,9 @@ import InventoryDetails from "./Components/Pages/InventoryDetails";
 import Order from "./Components/Pages/Order";
 import { Provider } from "react-redux";
 import store from "./Components/Store/store";
-import SetupDashboard from "./Components/Pages/Setups/SetupDashboard";
 import setups from "./Components/Pages/setup";
 import DrugDashboard from "./Components/Pages/Setups/Drug/DrugDashboard";
+import DrugSetup from "./Components/Pages/Setups/Drug/DrugSetup";
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
           <NavigationBar />
           <Routes>
             <Route path="/" Component={Home} />
+            {/* <Route path="/utils" Component={AppUtils} /> */}
             <Route path="/home" Component={Home} />
             <Route path="/PatientRegistration" Component={PatientReg} />
             <Route path="/inventory" Component={InventoryDetails} />
@@ -28,6 +29,8 @@ function App() {
 
             <Route path="/Setups" Component={setups} />
             <Route path="/Setups/Drug/Dashboard" Component={DrugDashboard} />
+            <Route path="/Setups/Drug/create" Component={DrugSetup} />
+            <Route path="/Setups/Drug/update" Component={DrugSetup} />
           </Routes>
         </Router>
       </Provider>

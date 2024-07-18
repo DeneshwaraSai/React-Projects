@@ -11,13 +11,13 @@
 .inventory,
 .message,
 .order,
-.patientReg, .setups, .drugDashboard {
+.patientReg, .setups, .drug {
   /* display: flex; */
   height: 90vh;
   /* align-items: center; */
   /* justify-content: center; */
   margin-left: 250px;
-  padding: 2px;
+  padding: 12px;
   /* font-size: 3rem; */
 }
 

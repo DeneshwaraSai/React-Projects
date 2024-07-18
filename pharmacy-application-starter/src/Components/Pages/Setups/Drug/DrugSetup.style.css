@@ -1,0 +1,12 @@
+.col-120 {
+    width: 200px;
+}
+
+.button-style {
+    display: flex;
+    float: right;
+}
+
+.button-padding {
+    padding: 12px;
+}

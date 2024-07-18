@@ -1,4 +1,3 @@
-import { act } from "@testing-library/react";
 import { PatientAction, PatientHeaderContext } from "./PatientHeader.types";
 
 const initialState: PatientHeaderContext = {

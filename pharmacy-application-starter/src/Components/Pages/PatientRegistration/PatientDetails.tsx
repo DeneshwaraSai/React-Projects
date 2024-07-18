@@ -171,7 +171,7 @@ function PatientDetails() {
   };
 
   return (
-    <div style={{ padding: "8px" }}>
+    <div>
       <div>
         <Snackbar
           anchorOrigin={{
