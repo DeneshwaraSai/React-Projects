@@ -12,6 +12,7 @@ import store from "./Components/Store/store";
 import setups from "./Components/Pages/setup";
 import DrugDashboard from "./Components/Pages/Setups/Drug/DrugDashboard";
 import DrugSetup from "./Components/Pages/Setups/Drug/DrugSetup";
+import SupplierDashboard from "./Components/Pages/Setups/Supplier/SupplierDashboard";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/Setups/Drug/Dashboard" Component={DrugDashboard} />
             <Route path="/Setups/Drug/create" Component={DrugSetup} />
             <Route path="/Setups/Drug/update" Component={DrugSetup} />
+            <Route path="/Setups/Supplier/Dashboard" Component={SupplierDashboard} />
           </Routes>
         </Router>
       </Provider>

@@ -11,7 +11,7 @@
 .inventory,
 .message,
 .order,
-.patientReg, .setups, .drug {
+.patientReg, .setups, .drug, .supplier {
   /* display: flex; */
   height: 90vh;
   /* align-items: center; */

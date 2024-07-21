@@ -12,6 +12,6 @@ export const setupInfo = [
     title: "Supplier",
     iconName: <FaIcons.FaShoppingCart size={50} />,
     resourceId: "Supplier-Component",
-    path: "",
+    path: "/Setups/Supplier/Dashboard",
   },
 ];
