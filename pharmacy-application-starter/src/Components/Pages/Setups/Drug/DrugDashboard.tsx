@@ -112,10 +112,9 @@ function DrugDashboard() {
 
           <div className="adjust-button">
             <Button
-              variant="text"
-              onClick={() => goToUpdate()}
+              variant="outlined"
               startIcon={<MdIcons.MdDelete />}
-              sx={{ color: "#ff0000", border: "1px solid #ff0000" }}
+              color="error"
             >
               Delete
             </Button>

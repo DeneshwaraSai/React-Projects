@@ -64,7 +64,7 @@ function SupplierDashboard() {
           <Button
             variant="contained"
             onClick={() => goToCreate()}
-            startIcon={<FaIcons.FaEdit />}
+            startIcon={<IoIcons.IoMdAddCircle />}
           >
             Create
           </Button>
@@ -74,7 +74,7 @@ function SupplierDashboard() {
           <Button
             variant="contained"
             onClick={() => goToUpdate()}
-            startIcon={<IoIcons.IoMdAddCircle />}
+            startIcon={<FaIcons.FaEdit />}
           >
             Update
           </Button>
@@ -84,7 +84,7 @@ function SupplierDashboard() {
           <Button
             variant="outlined"
             startIcon={<MdIcons.MdDelete />}
-            sx={{ color: "#ff0000", border: "1px solid #ff0000" }}
+            color="error"
           >
             Delete
           </Button>

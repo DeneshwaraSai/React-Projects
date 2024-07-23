@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavigationBar from "./Components/NavBar/NavigationBar";
 import Home from "./Components/Pages/Home";
 import PatientReg from "./Components/Pages/PatientReg";
-import InventoryDetails from "./Components/Pages/InventoryDetails";
+import Inventory from "./Components/Pages/Inventory";
 import Order from "./Components/Pages/Order";
 import { Provider } from "react-redux";
 import store from "./Components/Store/store";
@@ -26,7 +26,7 @@ function App() {
             {/* <Route path="/utils" Component={AppUtils} /> */}
             <Route path="/home" Component={Home} />
             <Route path="/PatientRegistration" Component={PatientReg} />
-            <Route path="/inventory" Component={InventoryDetails} />
+            <Route path="/inventory" Component={Inventory} />
             <Route path="/order" Component={Order} />
 
             <Route path="/Setups" Component={setups} />
