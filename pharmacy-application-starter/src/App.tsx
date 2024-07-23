@@ -13,6 +13,7 @@ import setups from "./Components/Pages/setup";
 import DrugDashboard from "./Components/Pages/Setups/Drug/DrugDashboard";
 import DrugSetup from "./Components/Pages/Setups/Drug/DrugSetup";
 import SupplierDashboard from "./Components/Pages/Setups/Supplier/SupplierDashboard";
+import SupplierSetup from "./Components/Pages/Setups/Supplier/SupplierSetup";
 
 function App() {
   return (
@@ -31,8 +32,12 @@ function App() {
             <Route path="/Setups" Component={setups} />
             <Route path="/Setups/Drug/Dashboard" Component={DrugDashboard} />
             <Route path="/Setups/Drug/create" Component={DrugSetup} />
-            <Route path="/Setups/Drug/update" Component={DrugSetup} />
-            <Route path="/Setups/Supplier/Dashboard" Component={SupplierDashboard} />
+            <Route path="/Setups/Drug/update/:id" Component={DrugSetup} />
+            <Route
+              path="/Setups/Supplier/Dashboard"
+              Component={SupplierDashboard}
+            />
+            <Route path="/Setups/Supplier/create" Component={SupplierSetup} />
           </Routes>
         </Router>
       </Provider>

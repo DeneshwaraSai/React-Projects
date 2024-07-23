@@ -31,9 +31,13 @@ function NavigationBar() {
     console.log(value);
     if (value.length > 2) {
       setPatientDropDown([]);
-      console.log((PHARMACY_HOST_NAME + EndPoints.SEARCH_PATIENT_BY_NAME).replace("{value}", value))
       axios
-        .get((PHARMACY_HOST_NAME + EndPoints.SEARCH_PATIENT_BY_NAME).replace("{value}", value))
+        .get(
+          (PHARMACY_HOST_NAME + EndPoints.SEARCH_PATIENT_BY_NAME).replace(
+            "{value}",
+            value
+          )
+        )
         .then((res: AxiosResponse<PatientSearch[]>) => {
           console.log(res.data);
 
@@ -121,7 +125,7 @@ function NavigationBar() {
               return (
                 <li key={index} className={item.cName}>
                   <Link to={item.path}>
-                    {item.icon}
+                    <div style={{ marginRight: "6px" }}> {item.icon} </div>
                     <span>{item.title}</span>
                   </Link>
                 </li>

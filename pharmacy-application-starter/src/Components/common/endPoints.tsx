@@ -16,4 +16,10 @@ export class EndPoints {
   static UPDATE_DRUG = "/drug/update";
   static FIND_DRUG_BY_ID = "/drug/{id}";
   static DRUG_LIST = "/drug/all";
+
+  static SUPPLIER_CODE_VALUE = "/supplier/codeValue";
+  static SUPPLIER_LIST = "/supplier/supplier-list"; 
+  static SUPPLIER_CREATE = "/supplier/create";
+  static SUPPLIER_UPDATE = "/supplier/update";
+  static SUPPLIER_FIND_BY_ID = "/supplier/{id}";
 }
