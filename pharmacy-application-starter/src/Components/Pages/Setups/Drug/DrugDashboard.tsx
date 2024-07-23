@@ -10,7 +10,6 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { useEffect, useState } from "react";
 import * as FaIcons from "react-icons/fa";
@@ -24,7 +23,6 @@ import { EndPoints, PHARMACY_HOST_NAME } from "../../../common/endPoints";
 import "./DrugDashboard.style.css";
 import { DrugInfo } from "./DrugInfo.type";
 import store from "../../../Store/store";
-import DrugTable from "./DrugTable";
 
 function DrugDashboard() {
   const navigate = useNavigate();
@@ -39,17 +37,6 @@ function DrugDashboard() {
   const goToUpdate = () => {
     navigate("/Setups/Drug/create");
   };
-
-  const gridColumns: GridColDef[] = [
-    {
-      field: "name",
-      headerName: "Drug name",
-    },
-    {
-      field: "type",
-      headerName: "Drug Type",
-    },
-  ];
 
   useEffect(() => {
     store
@@ -82,6 +69,11 @@ function DrugDashboard() {
   const getStatusByCode = (code: string) => {
     const codeValue = statusCodeValue.find((item) => item.code === code);
     return codeValue ? codeValue.value : code;
+  };
+
+  const handleCheckBox = (index: number, item: DrugInfo) => {
+    console.log(index);
+    console.log(item);
   };
 
   return (
@@ -138,15 +130,15 @@ function DrugDashboard() {
 
       <Card style={{ padding: "12px" }}>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }}>
+          <Table sx={{ minWidth: 300 }}>
             <TableHead>
               <TableRow>
                 <TableCell> </TableCell>
                 <TableCell> Name </TableCell>
                 <TableCell> Type </TableCell>
                 <TableCell> HSN Code </TableCell>
-                <TableCell> CGST </TableCell>
-                <TableCell> SGST </TableCell>
+                <TableCell> CGST % </TableCell>
+                <TableCell> SGST % </TableCell>
                 <TableCell> Generic Name </TableCell>
                 <TableCell> Status </TableCell>
               </TableRow>
@@ -155,9 +147,12 @@ function DrugDashboard() {
             <TableBody>
               {drugList.map((item: DrugInfo, index: number) => {
                 return (
-                  <TableRow key={index}>
+                  <TableRow key={index + 1}>
                     <TableCell>
                       <Checkbox
+                        onChange={() => {
+                          handleCheckBox(index, item);
+                        }}
                         style={{ padding: "0", margin: "0" }}
                       ></Checkbox>
                     </TableCell>
