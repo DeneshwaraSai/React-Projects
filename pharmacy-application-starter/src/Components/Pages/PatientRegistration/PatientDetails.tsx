@@ -311,7 +311,7 @@ function PatientDetails() {
                 }}
                 InputProps={{
                   inputProps: {
-                    max: "9999-12-31",
+                    max: new Date().toISOString().split("T")[0],
                     pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
                   },
                 }}
