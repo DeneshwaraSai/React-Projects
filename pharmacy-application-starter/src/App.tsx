@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavigationBar from "./Components/NavBar/NavigationBar";
 import Home from "./Components/Pages/Home";
 import PatientReg from "./Components/Pages/PatientReg";
-import Inventory from "./Components/Pages/Inventory";
+// import Inventory from "./Components/Pages/Inventory";
 import Order from "./Components/Pages/Order";
 import { Provider } from "react-redux";
 import store from "./Components/Store/store";
@@ -14,6 +14,8 @@ import DrugDashboard from "./Components/Pages/Setups/Drug/DrugDashboard";
 import DrugSetup from "./Components/Pages/Setups/Drug/DrugSetup";
 import SupplierDashboard from "./Components/Pages/Setups/Supplier/SupplierDashboard";
 import SupplierSetup from "./Components/Pages/Setups/Supplier/SupplierSetup";
+import Inventory from "./Components/Pages/Inventory";
+import InventoryParent from "./Components/Pages/Inventory/InventoryParent";
 
 function App() {
   return (
@@ -38,6 +40,10 @@ function App() {
               Component={SupplierDashboard}
             />
             <Route path="/Setups/Supplier/create" Component={SupplierSetup} />
+
+
+            <Route path="/inventory/create" Component={InventoryParent} />
+            <Route path="/inventory/update/:id" Component={InventoryParent} />
           </Routes>
         </Router>
       </Provider>

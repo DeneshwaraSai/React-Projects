@@ -4,7 +4,7 @@ import InventoryDashboard from "./Inventory/InventoryDashboard";
 function Inventory() {
   return (
     <div className="inventory">
-      <h2> Inventory Details </h2>
+      {/* <h2> Inventory Details </h2> */}
       <InventoryDashboard />
     </div>
   );
