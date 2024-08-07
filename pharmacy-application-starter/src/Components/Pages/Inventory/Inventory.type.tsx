@@ -36,3 +36,8 @@ export type InventoryDetails = {
   sellingCost: Number | undefined;
   totalSellingCost: Number | undefined;
 };
+
+export type InventoryModal = {
+  isOpen: boolean;
+  deleteIndex: Number | null;
+};

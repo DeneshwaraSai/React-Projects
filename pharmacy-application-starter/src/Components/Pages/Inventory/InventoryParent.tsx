@@ -6,6 +6,8 @@ import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
 import InventoryChild from "./InventoryChild";
 import { DrugInfo } from "../Setups/Drug/DrugInfo.type";
 import InventoryPayment from "./InventoryPayment";
+import { InventoryDetails } from "./Inventory.type";
+import { inventoryChildInitialState } from "./Inventory.initialState";
 
 function InventoryParent() {
   const [supplierCodeValue, setSupplierCodeValue] = useState<CodeValue[]>([]);
@@ -36,7 +38,7 @@ function InventoryParent() {
     <div className="inventory">
       <div>
         <Card style={{ padding: "10px" }}>
-          <div className="container">
+          <div className="">
             <div className="row">
               <div className="col">
                 <TextField fullWidth placeholder="Supplier Name" />
@@ -85,7 +87,7 @@ function InventoryParent() {
 
         <br></br>
 
-        <InventoryChild />
+        <InventoryChild   />
 
         <br></br>
 

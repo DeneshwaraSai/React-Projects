@@ -4,9 +4,11 @@ import * as BsIcons from "react-icons/bs";
 import * as MdIcons from "react-icons/md";
 import {
   Autocomplete,
+  Box,
   Button,
-  Card, 
+  Card,
   IconButton,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -20,15 +22,19 @@ import "./InventoryChild.style.css";
 import { DrugInfo } from "../Setups/Drug/DrugInfo.type";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
-import { InventoryDetails } from "./Inventory.type";
+import { InventoryDetails, InventoryModal } from "./Inventory.type";
 import {
   inventoryChildInitialState,
   TableHeaders,
 } from "./Inventory.initialState";
 
 function InventoryChild() {
+  const initialInventoryModal: InventoryModal = {
+    isOpen: false,
+    deleteIndex: null,
+  };
   const [searchedDrugs, setSearchedDrugs] = useState<DrugInfo[]>([]);
-
+  const [inventoryModal, setInventoryModal] = useState<InventoryModal>(initialInventoryModal  );
   const [dataSource, setDataSource] = useState<InventoryDetails[]>([
     inventoryChildInitialState,
     inventoryChildInitialState,
@@ -64,12 +70,37 @@ function InventoryChild() {
     setDataSource([...dataSource, inventoryChildInitialState]);
   };
 
-  const deleteRecord = (index: number) => {
+  const deleteRecord = async (index: number) => {
+    if (dataSource[index].drugName) {
+      setInventoryModal({
+        isOpen: true,
+        deleteIndex: index,
+      });
+    } else {
+      setDataSource((prevState) => {
+        const previousState = [...prevState];
+        const state = previousState.filter(
+          (item, i) => i != inventoryModal.deleteIndex
+        );
+        return state;
+      });
+    }
+  };
+
+  const closeInvModel = () => {
+    setInventoryModal(initialInventoryModal);
+  };
+
+  const deleteByIndex = () => {
     setDataSource((prevState) => {
-      const newState = [...prevState];
-      const state = newState.filter((item, i) => i != index);
+      const previousState = [...prevState];
+      const state = previousState.filter(
+        (item, i) => i != inventoryModal.deleteIndex
+      );
       return state;
     });
+
+    closeInvModel();
   };
 
   const setDrugItem = (
@@ -102,14 +133,64 @@ function InventoryChild() {
     });
   };
 
+  const onSubmit = () => {
+    console.log(dataSource);
+  };
+
+  const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+  };
+
   return (
     <div>
+      <Modal
+        key="deleteModal"
+        open={inventoryModal.isOpen}
+        onClose={() => closeInvModel()}
+      >
+        <Box key="Box-modal" sx={style}>
+          <h4>Do you want to delete ________ ?</h4>
+          <br></br>
+          <div style={{ display: "flex", float: "right" }}>
+            <Button
+              variant="outlined"
+              style={{ marginRight: 4 }}
+              onClick={() => closeInvModel()}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => deleteByIndex()}
+            >
+              Delete
+            </Button>
+          </div>
+        </Box>
+      </Modal>
+
       <Card>
-        <Button onClick={() => add()}> Add </Button>
+        <div style={{ float: "right", margin: "11px 6px 12px 0px" }}>
+          <Button variant="contained" onClick={() => add()}>
+            Add
+          </Button>
+        </div>
+
         <TableContainer sx={{ borderRadius: 0 }} component={Paper}>
           <Table>
             <TableHead style={{ height: 20, padding: 0, margin: 0 }}>
-              <TableRow style={{ height: 20, padding: 0, margin: 0 }}>
+              <TableRow
+                key="headKey1"
+                style={{ height: 20, padding: 0, margin: 0 }}
+              >
                 {TableHeaders.map((item, index) => {
                   return (
                     <TableCell
@@ -194,6 +275,7 @@ function InventoryChild() {
                       </TableCell>
                       <TableCell sx={{ border: "1px solid #A9A9A9" }}>
                         <TextField
+                          type="number"
                           size="small"
                           style={{ width: "100px" }}
                           className="text-field"
@@ -209,11 +291,17 @@ function InventoryChild() {
 
                       <TableCell sx={{ border: "1px solid #A9A9A9" }}>
                         <TextField
+                          type="number"
                           size="small"
                           style={{ width: "90px" }}
                           className="text-field"
                           fullWidth
+                          value={item.quantity}
+                          name="quantity"
                           placeholder="Quantity"
+                          onChange={(e) =>
+                            setDrugItem(index, e.target.name, e.target.value)
+                          }
                         />
                       </TableCell>
                       <TableCell sx={{ border: "1px solid #A9A9A9" }}>
@@ -224,6 +312,8 @@ function InventoryChild() {
                             className="text-field"
                             fullWidth
                             placeholder="HSN Code"
+                            value={item.hsnCode}
+                            name="hsnCode"
                           />
                           <Tooltip
                             title={
@@ -248,20 +338,32 @@ function InventoryChild() {
                       </TableCell>
                       <TableCell sx={{ border: "1px solid #A9A9A9" }}>
                         <TextField
+                          type="number"
                           size="small"
                           style={{ width: "140px" }}
                           className="text-field"
                           fullWidth
                           placeholder="Manufacturer Rate"
+                          name="manufacturerRate"
+                          value={item.manufacturerRate}
+                          onChange={(e) =>
+                            setDrugItem(index, e.target.name, e.target.value)
+                          }
                         />
                       </TableCell>
                       <TableCell sx={{ border: "1px solid #A9A9A9" }}>
                         <TextField
+                          type="number"
                           size="small"
                           style={{ width: "140px" }}
                           className="text-field"
                           fullWidth
                           placeholder="Total Manufacturer Rate"
+                          name="totalManufacturerRate"
+                          value={item.totalManufacturerRate}
+                          onChange={(e) =>
+                            setDrugItem(index, e.target.name, e.target.value)
+                          }
                         />
                       </TableCell>
 
@@ -273,31 +375,49 @@ function InventoryChild() {
                           fullWidth
                           type="number"
                           placeholder="Net Amount"
+                          name="netAmount"
+                          value={item.netAmount}
+                          onChange={(e) =>
+                            setDrugItem(index, e.target.name, e.target.value)
+                          }
                         />
                       </TableCell>
                       <TableCell sx={{ border: "1px solid #A9A9A9" }}>
                         <TextField
+                          type="number"
                           size="small"
                           style={{ width: "140px" }}
                           className="text-field"
                           fullWidth
                           placeholder="Selling Cost"
+                          value={item.sellingCost}
+                          name="sellingCost"
+                          onChange={(e) =>
+                            setDrugItem(index, e.target.name, e.target.value)
+                          }
                         />
                       </TableCell>
 
                       <TableCell sx={{ border: "1px solid #A9A9A9" }}>
                         <TextField
+                          type="number"
                           size="small"
                           style={{ width: "140px" }}
                           className="text-field"
                           fullWidth
                           placeholder="Total Selling Cost"
+                          value={item.totalSellingCost}
+                          name="totalSellingCost"
+                          onChange={(e) =>
+                            setDrugItem(index, e.target.name, e.target.value)
+                          }
                         />
                       </TableCell>
                       <TableCell sx={{ border: "1px solid #A9A9A9" }}>
                         <IconButton onClick={() => deleteRecord(index)}>
                           <MdIcons.MdDelete
                             color="error"
+                            style={{ color: "red" }}
                             size={25}
                           ></MdIcons.MdDelete>
                         </IconButton>
