@@ -19,25 +19,43 @@ export type PaymentInfo = {
   paymentDetails: Payment[];
 };
 
-export type InventoryDetails = {
+export type Inventory = {
   id: Number | undefined;
-  drugName: String | undefined;
-  drugCode: Number | undefined;
-  batchNumber: String | undefined;
-  expiryDate: Date | undefined;
-  stripSize: Number | undefined;
-  quantity: Number | undefined;
-  hsnCode: String | undefined;
-  cgst: Number | undefined;
-  sgst: Number | undefined;
-  manufacturerRate: Number | undefined;
-  totalManufacturerRate: Number | undefined;
-  netAmount: Number | undefined;
-  sellingCost: Number | undefined;
-  totalSellingCost: Number | undefined;
+  supplierCode: String;
+  invoiceNumber: String;
+  invoiceDate: Date;
+  discountPerc: Number;
+  discountAmt: Number;
+  invoiceAmt: Number;
+  notes: string;
+  inventoryDetails: InventoryItems[];
+};
+
+export type InventoryItems = {
+  id: Number | undefined;
+  drugName: String;
+  drugCode: String;
+  batchNumber: String;
+  expiryDate: Date | null;
+  stripSize: Number;
+  quantity: Number;
+  hsnCode: String;
+  cgst: Number;
+  sgst: Number;
+  manufacturerRate: Number;
+  totalManufacturerRate: Number;
+  netAmount: Number;
+  invoiceAmount: Number;
+  sellingCost: Number;
+  totalSellingCost: Number;
 };
 
 export type InventoryModal = {
   isOpen: boolean;
   deleteIndex: Number | null;
+};
+
+export type SimpleLabelCode = {
+  label: string;
+  code: string;
 };

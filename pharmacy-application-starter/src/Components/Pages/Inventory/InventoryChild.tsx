@@ -22,7 +22,7 @@ import "./InventoryChild.style.css";
 import { DrugInfo } from "../Setups/Drug/DrugInfo.type";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
-import { InventoryDetails, InventoryModal } from "./Inventory.type";
+import { InventoryItems, InventoryModal } from "./Inventory.type";
 import {
   inventoryChildInitialState,
   TableHeaders,
@@ -35,7 +35,7 @@ function InventoryChild() {
   };
   const [searchedDrugs, setSearchedDrugs] = useState<DrugInfo[]>([]);
   const [inventoryModal, setInventoryModal] = useState<InventoryModal>(initialInventoryModal  );
-  const [dataSource, setDataSource] = useState<InventoryDetails[]>([
+  const [dataSource, setDataSource] = useState<InventoryItems[]>([
     inventoryChildInitialState,
     inventoryChildInitialState,
   ]);
@@ -124,7 +124,7 @@ function InventoryChild() {
       updatedDataSource[index] = {
         ...updatedDataSource[index],
         drugName: String(option.name),
-        drugCode: Number(option.id),
+        drugCode: String(option.id),
         cgst: Number(option.cgst),
         sgst: Number(option.sgst),
         hsnCode: String(option.hsnCode),

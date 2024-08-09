@@ -15,7 +15,7 @@ import DrugSetup from "./Components/Pages/Setups/Drug/DrugSetup";
 import SupplierDashboard from "./Components/Pages/Setups/Supplier/SupplierDashboard";
 import SupplierSetup from "./Components/Pages/Setups/Supplier/SupplierSetup";
 import Inventory from "./Components/Pages/Inventory";
-import InventoryParent from "./Components/Pages/Inventory/InventoryParent";
+import InventoryDetails from "./Components/Pages/Inventory/InventoryDetails";
 
 function App() {
   return (
@@ -42,8 +42,8 @@ function App() {
             <Route path="/Setups/Supplier/create" Component={SupplierSetup} />
 
 
-            <Route path="/inventory/create" Component={InventoryParent} />
-            <Route path="/inventory/update/:id" Component={InventoryParent} />
+            <Route path="/inventory/create" Component={InventoryDetails} />
+            <Route path="/inventory/update/:id" Component={InventoryDetails} />
           </Routes>
         </Router>
       </Provider>

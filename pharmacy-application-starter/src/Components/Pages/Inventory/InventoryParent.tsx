@@ -1,17 +1,26 @@
-import { Button, Card, TextField } from "@mui/material";
+import {
+  Card,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { CodeValue } from "../../Cache/Cache.types";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
-import InventoryChild from "./InventoryChild";
-import { DrugInfo } from "../Setups/Drug/DrugInfo.type";
-import InventoryPayment from "./InventoryPayment";
-import { InventoryDetails } from "./Inventory.type";
-import { inventoryChildInitialState } from "./Inventory.initialState";
-
-function InventoryParent() {
+import { Inventory } from "./Inventory.type";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import dayjs from "dayjs";
+export type PropInventory = {
+  inventory: Inventory;
+  setInventory: any;
+};
+function InventoryParent({ inventory, setInventory }: PropInventory) {
   const [supplierCodeValue, setSupplierCodeValue] = useState<CodeValue[]>([]);
-  const [drugList, setDrugList] = useState<DrugInfo[]>([]);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -27,29 +36,68 @@ function InventoryParent() {
       .get(PHARMACY_HOST_NAME + EndPoints.SUPPLIER_CODE_VALUE)
       .then((res) => setSupplierCodeValue(res.data))
       .catch((err) => console.log(err));
+  };
 
-    await axios
-      .get(PHARMACY_HOST_NAME + EndPoints.DRUG_LIST)
-      .then((res) => setDrugList(res.data))
-      .catch((err) => console.log(err));
+  const onChangeEvent = (fieldName: string, fieldValue: any) => {
+    setInventory(fieldName, fieldValue);
+  };
+
+  const onDateChange = (date: any) => {
+    setInventory("invoiceDate", date?.$d);
   };
 
   return (
-    <div className="inventory">
+    <div>
       <div>
         <Card style={{ padding: "10px" }}>
           <div className="">
             <div className="row">
               <div className="col">
-                <TextField fullWidth placeholder="Supplier Name" />
+                <FormControl fullWidth>
+                  <InputLabel id="supplierCode"> Supplier Name </InputLabel>
+                  <Select
+                    value={inventory.supplierCode}
+                    labelId="supplierCode"
+                    name="supplierCode"
+                    label="Supplier Name"
+                    onChange={(e) =>
+                      onChangeEvent(e.target.name, e.target.value)
+                    }
+                    placeholder="Supplier Name"
+                  >
+                    {supplierCodeValue.map((item, index) => {
+                      return (
+                        <MenuItem value={String(item.code)}>
+                          {item.value}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
               </div>
 
               <div className="col">
-                <TextField fullWidth placeholder="In-voice Number" />
+                <TextField
+                  fullWidth
+                  name="invoiceNumber"
+                  value={inventory.invoiceNumber}
+                  onChange={(e) => onChangeEvent(e.target.name, e.target.value)}
+                  placeholder="In-voice Number"
+                  label="In-voice Number"
+                />
               </div>
 
               <div className="col">
-                <TextField fullWidth type="date" placeholder="In-voice Date" />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker
+                      name="invoiceDate"
+                      label="Invoice Date"
+                      value={dayjs(inventory.invoiceDate)}
+                      onChange={onDateChange}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
               </div>
             </div>
 
@@ -59,6 +107,7 @@ function InventoryParent() {
                   fullWidth
                   type="number"
                   placeholder="Overall Discount %"
+                  label="Overall Discount %"
                 />
               </div>
               <div className="col">
@@ -66,6 +115,7 @@ function InventoryParent() {
                   type="number"
                   fullWidth
                   placeholder="Overall Discount Amount"
+                  label="Overall Discount Amount"
                 />
               </div>
 
@@ -73,36 +123,28 @@ function InventoryParent() {
                 <TextField
                   fullWidth
                   type="number"
+                  name="invoiceAmt"
+                  value={inventory.invoiceAmt}
+                  onChange={(e) => onChangeEvent(e.target.name, e.target.value)}
                   placeholder="Invoice Amount"
+                  label="Invoice Amount"
                 />
               </div>
             </div>
             <div className="row">
               <div className="col">
-                <TextField fullWidth placeholder="Notes" />
+                <TextField
+                  fullWidth
+                  name="notes"
+                  value={inventory.notes}
+                  onChange={(e) => onChangeEvent(e.target.name, e.target.value)}
+                  placeholder="Notes"
+                  label="Notes"
+                />
               </div>
             </div>
           </div>
         </Card>
-
-        <br></br>
-
-        <InventoryChild   />
-
-        <br></br>
-
-        <InventoryPayment />
-        <br></br>
-        <div style={{ display: "flex", float: "right", marginBottom: 12 }}>
-          <div style={{ marginRight: 6 }}>
-            <Button variant="outlined"> cancel </Button>
-          </div>
-          <div style={{ marginLeft: 6 }}>
-            <Button variant="contained"> submit </Button>
-          </div>
-        </div>
-        <br></br>
-        <div></div>
       </div>
     </div>
   );

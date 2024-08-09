@@ -1,21 +1,34 @@
-import { InventoryDetails } from "./Inventory.type";
+import { Inventory, InventoryItems, InventoryModal } from "./Inventory.type";
 
-export const inventoryChildInitialState: InventoryDetails = {
+export const inventoryChildInitialState: InventoryItems = {
   id: undefined,
-  drugName: undefined,
-  drugCode: undefined,
-  batchNumber: undefined,
-  expiryDate: undefined,
-  stripSize: undefined,
-  quantity: undefined,
-  hsnCode: undefined,
-  cgst: undefined,
-  sgst: undefined,
-  manufacturerRate: undefined,
-  totalManufacturerRate: undefined,
-  netAmount: undefined,
-  sellingCost: undefined,
-  totalSellingCost: undefined,
+  drugName: "",
+  drugCode: "",
+  batchNumber: "",
+  expiryDate: new Date(),
+  stripSize: 0,
+  quantity: 0,
+  hsnCode: "",
+  cgst: 0,
+  sgst: 0,
+  manufacturerRate: 0,
+  totalManufacturerRate: 0,
+  netAmount: 0,
+  invoiceAmount: 0,
+  sellingCost: 0,
+  totalSellingCost: 0,
+};
+
+export const inventoryInitialState: Inventory = {
+  id: undefined,
+  supplierCode: "",
+  invoiceNumber: "",
+  invoiceDate: new Date(),
+  discountPerc: 0,
+  discountAmt: 0,
+  invoiceAmt: 0,
+  notes: "",
+  inventoryDetails: [],
 };
 
 export const TableHeaders = [
@@ -27,8 +40,14 @@ export const TableHeaders = [
   "HSN Code",
   "Manufacturer Rate",
   "Total Manufacturer Rate",
-  "Net Amount",
+  "Net Amount Including discounts",
+  "Invoice Amount (net Amt + Taxes)",
   "Selling Cost",
   "Total Selling Cost",
   "",
 ];
+
+export const initialInventoryModal: InventoryModal = {
+  isOpen: false,
+  deleteIndex: null,
+};
