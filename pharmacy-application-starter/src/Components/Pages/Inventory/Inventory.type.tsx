@@ -28,6 +28,7 @@ export type Inventory = {
   discountAmt: Number;
   invoiceAmt: Number;
   notes: string;
+  inventoryNumber: Number;
   inventoryDetails: InventoryItems[];
 };
 

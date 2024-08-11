@@ -88,16 +88,19 @@ function InventoryParent({ inventory, setInventory }: PropInventory) {
               </div>
 
               <div className="col">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker"]}>
-                    <DatePicker
-                      name="invoiceDate"
-                      label="Invoice Date"
-                      value={dayjs(inventory.invoiceDate)}
-                      onChange={onDateChange}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                <FormControl fullWidth style={{ marginTop: -10 }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        sx={{ width: "100%" }}
+                        name="invoiceDate"
+                        label="Invoice Date"
+                        value={dayjs(inventory.invoiceDate)}
+                        onChange={onDateChange}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </FormControl>
               </div>
             </div>
 

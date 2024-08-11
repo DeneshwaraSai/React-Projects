@@ -1,3 +1,4 @@
+import { SnackbarType } from "../../common/GlobalTypes";
 import { Inventory, InventoryItems, InventoryModal } from "./Inventory.type";
 
 export const inventoryChildInitialState: InventoryItems = {
@@ -28,6 +29,7 @@ export const inventoryInitialState: Inventory = {
   discountAmt: 0,
   invoiceAmt: 0,
   notes: "",
+  inventoryNumber: 0,
   inventoryDetails: [],
 };
 
@@ -50,4 +52,9 @@ export const TableHeaders = [
 export const initialInventoryModal: InventoryModal = {
   isOpen: false,
   deleteIndex: null,
+};
+export const initialSnackbar: SnackbarType = {
+  show: false,
+  type: "error",
+  message: "",
 };

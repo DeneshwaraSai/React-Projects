@@ -6,6 +6,7 @@ import * as MdIcons from "react-icons/md";
 import { Inventory, InventoryItems, InventoryModal } from "./Inventory.type";
 import {
   initialInventoryModal,
+  initialSnackbar,
   inventoryChildInitialState,
   inventoryInitialState,
   TableHeaders,
@@ -16,9 +17,11 @@ import {
   Box,
   Button,
   Card,
+  FormControl,
   IconButton,
   Modal,
   Paper,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -31,8 +34,15 @@ import { DrugInfo } from "../Setups/Drug/DrugInfo.type";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
 import axios from "axios";
 import { StringSupport } from "../../common/StringSupport";
+import { SnackbarType } from "../../common/GlobalTypes";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 function InventoryDetails() {
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<String[]>([]);
   const [inventory, setInventory] = useState<Inventory>(inventoryInitialState);
   const [searchedDrugs, setSearchedDrugs] = useState<DrugInfo[]>([]);
@@ -47,6 +57,7 @@ function InventoryDetails() {
   const updateFields = (fieldName: string, fieldValue: any) => {
     setInventory({ ...inventory, [fieldName]: fieldValue });
   };
+  const [snackbar, setSnackbar] = useState<SnackbarType>(initialSnackbar);
 
   const validateInventory = (): boolean => {
     console.log(inventory);
@@ -67,6 +78,10 @@ function InventoryDetails() {
       if (!StringSupport.isBlank(item.drugName)) return item;
     });
     console.log(inventoryDetails);
+
+    if (inventoryDetails.length === 0) {
+      errors.push("Inventory details cannot be empty.");
+    }
 
     inventoryDetails.forEach((items, index) => {
       if (StringSupport.isBlank(items.batchNumber)) {
@@ -111,11 +126,33 @@ function InventoryDetails() {
     return errors.length > 0 ? false : true;
   };
 
-  const onSubmit = () => {
-    validateInventory();
+  const onSubmit = async () => {
+    if (validateInventory()) {
+      console.log(inventory);
+      console.log(dataSource);
 
-    console.log(inventory);
-    console.log(dataSource);
+      inventory.inventoryDetails = dataSource;
+
+      axios
+        .post(PHARMACY_HOST_NAME + EndPoints.INVENTORY_CREATE, inventory)
+        .then((res) => {
+          console.log(res.data);
+          setSnackbar({
+            show: true,
+            type: "success",
+            message: "Submitted successfully!",
+          });
+          navigate("/inventory");
+        })
+        .catch((err) => {
+          console.log(err);
+          setSnackbar({
+            show: true,
+            type: "error",
+            message: `Error : ${err?.message}`,
+          });
+        });
+    }
   };
 
   const drugDropDown = (name: string) => {
@@ -305,17 +342,53 @@ function InventoryDetails() {
     p: 4,
   };
 
+  const closeSnackbar = () => {
+    setSnackbar(initialSnackbar);
+  };
+
+  const onExpiryDateChange = (date: any, index: number) => {
+    setDataSource((prevState) => {
+      const state = [...prevState];
+      state[index] = {
+        ...state[index],
+        expiryDate: date.$d,
+      };
+      return state;
+    });
+  };
+
+  const onCancel = () => {
+    navigate("/inventory");
+  };
+
   return (
     <div className="inventory">
+      <Snackbar
+        style={{ marginTop: 50 }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={snackbar.show}
+        autoHideDuration={5000}
+        onClose={() => closeSnackbar()}
+        message="gtrthjrghjhthyj"
+      >
+        <Alert onClose={() => {}} variant="filled" severity={snackbar.type}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+
       {errorMessage.map((message) => {
         return (
           <Alert
             style={{ marginBottom: 6 }}
-            onClose={() => {}}
+            onClose={() => {
+              closeSnackbar();
+            }}
             severity="error"
           >
-            {" "}
-            {message}{" "}
+            {message}
           </Alert>
         );
       })}
@@ -444,7 +517,7 @@ function InventoryDetails() {
                         </TableCell>
 
                         <TableCell sx={{ border: "1px solid #A9A9A9" }}>
-                          <TextField
+                          {/* <TextField
                             size="small"
                             style={{ width: "140px" }}
                             className="text-field"
@@ -464,7 +537,22 @@ function InventoryDetails() {
                             onChange={(e) =>
                               setDrugItem(index, e.target.name, e.target.value)
                             }
-                          />
+                          /> */}
+
+                          <FormControl fullWidth>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DemoContainer components={["DatePicker"]}>
+                                <DatePicker
+                                  name="expiryDate"
+                                  value={dayjs(item.expiryDate)}
+                                  label="Expiry Date"
+                                  onChange={(date) =>
+                                    onExpiryDateChange(date, index)
+                                  }
+                                />
+                              </DemoContainer>
+                            </LocalizationProvider>
+                          </FormControl>
                         </TableCell>
                         <TableCell sx={{ border: "1px solid #A9A9A9" }}>
                           <TextField
@@ -657,7 +745,9 @@ function InventoryDetails() {
       <br></br>
       <div style={{ display: "flex", float: "right", marginBottom: 12 }}>
         <div style={{ marginRight: 6 }}>
-          <Button variant="outlined"> cancel </Button>
+          <Button variant="outlined" onClick={() => onCancel()}>
+            cancel
+          </Button>
         </div>
         <div style={{ marginLeft: 6 }}>
           <Button variant="contained" onClick={() => onSubmit()}>
