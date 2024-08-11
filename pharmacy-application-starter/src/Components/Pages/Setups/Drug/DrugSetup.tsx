@@ -15,6 +15,7 @@ import { CodeValue, TaxCategory } from "../../../Cache/Cache.types";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../../common/endPoints";
 import { useNavigate } from "react-router-dom";
+import { drugInfoInitialState } from "./Drug.initialState";
 
 function DrugSetup() {
   const navigate = useNavigate();
@@ -40,21 +41,7 @@ function DrugSetup() {
       .catch((err) => err);
   }, []);
 
-  const initialState: DrugInfo = {
-    id: null,
-    name: "",
-    type: "",
-    unitsPerPack: 0,
-    hsnCode: "",
-    cgst: 0.0,
-    igst: 0.0,
-    sgst: 0.0,
-    status: "",
-    composition: "",
-    genericName: "",
-  };
-
-  const [drugInfo, setDruginfo] = useState(initialState);
+  const [drugInfo, setDruginfo] = useState(drugInfoInitialState);
 
   const onChangeInput = (field: string, value: any) => {
     console.log(field, value);
