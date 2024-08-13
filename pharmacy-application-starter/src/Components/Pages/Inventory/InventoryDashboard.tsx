@@ -16,6 +16,8 @@ import store from "../../Store/store";
 import { CodeValue } from "../../Cache/Cache.types";
 import { InventorySearch } from "./Inventory.type";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
 
 function InventoryDashboard() {
   const inventorySearchInitialState: InventorySearch = {
@@ -45,7 +47,20 @@ function InventoryDashboard() {
       .catch((err) => {
         console.log(err);
       });
+
+    getDashboardDetails();
   }, []);
+
+  const getDashboardDetails = () => {
+    axios
+      .get(PHARMACY_HOST_NAME + EndPoints.INVENTORY_DASHBOARD)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const onChangeSearch = (field: string, value: any) => {
     setInventorySearch({

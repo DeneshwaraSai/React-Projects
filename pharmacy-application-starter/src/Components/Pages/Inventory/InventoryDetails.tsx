@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InventoryParent from "./InventoryParent";
 import Tooltip from "@mui/material/Tooltip";
 import * as BsIcons from "react-icons/bs";
@@ -19,8 +19,11 @@ import {
   Card,
   FormControl,
   IconButton,
+  Menu,
+  MenuItem,
   Modal,
   Paper,
+  Select,
   Snackbar,
   Table,
   TableBody,
@@ -39,9 +42,11 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { drugInfoInitialState } from "../Setups/Drug/Drug.initialState";
 
 function InventoryDetails() {
+  const params = useParams();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<String[]>([]);
   const [inventory, setInventory] = useState<Inventory>(inventoryInitialState);
@@ -58,6 +63,25 @@ function InventoryDetails() {
     setInventory({ ...inventory, [fieldName]: fieldValue });
   };
   const [snackbar, setSnackbar] = useState<SnackbarType>(initialSnackbar);
+
+  useEffect(() => {
+    if (params?.id) {
+      axios
+        .get(
+          PHARMACY_HOST_NAME +
+            EndPoints.INVENTORY_FIND_BY_ID.replace("{id}", String(params?.id))
+        )
+        .then((res) => {
+          const inventoryResponse: Inventory = res.data;
+          setInventory(inventoryResponse);
+          setDataSource(inventoryResponse.inventoryDetails);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   const validateInventory = (): boolean => {
     console.log(inventory);
@@ -130,11 +154,21 @@ function InventoryDetails() {
     if (validateInventory()) {
       console.log(inventory);
       console.log(dataSource);
-
       inventory.inventoryDetails = dataSource;
+      let api;
+      if (params["id"]) {
+        api = axios.put(
+          PHARMACY_HOST_NAME + EndPoints.INVENTORY_UPDATE,
+          inventory
+        );
+      } else {
+        api = axios.post(
+          PHARMACY_HOST_NAME + EndPoints.INVENTORY_CREATE,
+          inventory
+        );
+      }
 
-      axios
-        .post(PHARMACY_HOST_NAME + EndPoints.INVENTORY_CREATE, inventory)
+      api
         .then((res) => {
           console.log(res.data);
           setSnackbar({
@@ -317,18 +351,20 @@ function InventoryDetails() {
   };
 
   const setDrugInfo = (index: number, option: DrugInfo) => {
-    setDataSource((prevState) => {
-      const updatedDataSource = [...prevState];
-      updatedDataSource[index] = {
-        ...updatedDataSource[index],
-        drugName: String(option.name),
-        drugCode: String(option.id),
-        cgst: Number(option.cgst),
-        sgst: Number(option.sgst),
-        hsnCode: String(option.hsnCode),
-      };
-      return updatedDataSource;
-    });
+    if (option) {
+      setDataSource((prevState) => {
+        const updatedDataSource = [...prevState];
+        updatedDataSource[index] = {
+          ...updatedDataSource[index],
+          drugName: String(option.name),
+          drugCode: String(option.id),
+          cgst: Number(option.cgst),
+          sgst: Number(option.sgst),
+          hsnCode: String(option.hsnCode),
+        };
+        return updatedDataSource;
+      });
+    }
   };
 
   const style = {
@@ -359,6 +395,26 @@ function InventoryDetails() {
 
   const onCancel = () => {
     navigate("/inventory");
+  };
+
+  const getDrugDetails = (id: String): DrugInfo => {
+    if (id) {
+      axios
+        .get(
+          (PHARMACY_HOST_NAME + EndPoints.FIND_DRUG_BY_ID).replace(
+            "{id}",
+            String(id)
+          )
+        )
+        .then((res) => {
+          return res.data as DrugInfo;
+        })
+        .catch((err) => {
+          console.log(err.message);
+          return drugInfoInitialState;
+        });
+    }
+    return drugInfoInitialState;
   };
 
   return (
@@ -457,48 +513,38 @@ function InventoryDetails() {
                         key={index}
                       >
                         <TableCell sx={{ border: "1px solid #A9A9A9" }}>
-                          <Autocomplete
-                            disablePortal
-                            id="combo-box-demo"
-                            getOptionLabel={(option) => String(option.name)}
-                            options={searchedDrugs}
-                            onChange={(event, option) => {
-                              // console.log(option);
-                              setDrugInfo(index, option as DrugInfo);
-                            }}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                style={{ width: "200px" }}
-                                fullWidth
-                                placeholder="Drug Name"
-                                label="Drug Name"
-                                onChange={(e) => drugDropDown(e.target.value)}
-                              />
-                            )}
-                          />
-
-                          {/* <Autocomplete
-                            disableCloseOnSelect
-                            // getOptionLabel={(option) => String(option.name)}
-                            options={searchedDrugs}
-                            onChange={(event, option) => {
-                              setDrugInfo(index, option as DrugInfo);
-                            }}
-                            renderInput={(params) => {
-                              return (
+                          {params["id"] && item.id ? (
+                            <TextField
+                              fullWidth
+                              placeholder="Drug Name"
+                              label="Drug Name"
+                              style={{ width: "200px" }}
+                              disabled={true}
+                              value={item.drugName}
+                            />
+                          ) : (
+                            <Autocomplete
+                              getOptionLabel={(option) =>
+                                option?.name ? String(option.name) : ""
+                              }
+                              options={searchedDrugs}
+                              onClose={() => {}}
+                              onChange={(event, option) => {
+                                console.log("fhbjhdbjhfb");
+                                setDrugInfo(index, option as DrugInfo);
+                              }}
+                              renderInput={(params) => (
                                 <TextField
                                   {...params}
                                   style={{ width: "200px" }}
-                                  className="text-field"
                                   fullWidth
                                   placeholder="Drug Name"
                                   label="Drug Name"
                                   onChange={(e) => drugDropDown(e.target.value)}
                                 />
-                              );
-                            }}
-                          ></Autocomplete> */}
+                              )}
+                            />
+                          )}
                         </TableCell>
 
                         <TableCell sx={{ border: "1px solid #A9A9A9" }}>
@@ -751,7 +797,7 @@ function InventoryDetails() {
         </div>
         <div style={{ marginLeft: 6 }}>
           <Button variant="contained" onClick={() => onSubmit()}>
-            submit
+            {params["id"] ? "update" : "submit"}
           </Button>
         </div>
       </div>

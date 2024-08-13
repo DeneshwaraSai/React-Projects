@@ -60,3 +60,14 @@ export type SimpleLabelCode = {
   label: string;
   code: string;
 };
+
+export type InventoryDashboard = {
+  id: Number;
+  invoiceNumber: String;
+  invoiceAmt: Number;
+  supplierCode: String;
+  invoiceDate: Date;
+  inventoryNumber: Number;
+  status: String;
+  createdBy: String;
+};
