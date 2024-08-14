@@ -61,7 +61,7 @@ export type SimpleLabelCode = {
   code: string;
 };
 
-export type InventoryDashboard = {
+export type InventoryDashboardType = {
   id: Number;
   invoiceNumber: String;
   invoiceAmt: Number;

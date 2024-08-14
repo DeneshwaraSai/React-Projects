@@ -19,11 +19,8 @@ import {
   Card,
   FormControl,
   IconButton,
-  Menu,
-  MenuItem,
   Modal,
   Paper,
-  Select,
   Snackbar,
   Table,
   TableBody,
@@ -43,7 +40,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
-import { drugInfoInitialState } from "../Setups/Drug/Drug.initialState";
 
 function InventoryDetails() {
   const params = useParams();
@@ -65,7 +61,7 @@ function InventoryDetails() {
   const [snackbar, setSnackbar] = useState<SnackbarType>(initialSnackbar);
 
   useEffect(() => {
-    if (params?.id) {
+    if (params && params["id"]) {
       axios
         .get(
           PHARMACY_HOST_NAME +
@@ -397,26 +393,6 @@ function InventoryDetails() {
     navigate("/inventory");
   };
 
-  const getDrugDetails = (id: String): DrugInfo => {
-    if (id) {
-      axios
-        .get(
-          (PHARMACY_HOST_NAME + EndPoints.FIND_DRUG_BY_ID).replace(
-            "{id}",
-            String(id)
-          )
-        )
-        .then((res) => {
-          return res.data as DrugInfo;
-        })
-        .catch((err) => {
-          console.log(err.message);
-          return drugInfoInitialState;
-        });
-    }
-    return drugInfoInitialState;
-  };
-
   return (
     <div className="inventory">
       <Snackbar
@@ -449,6 +425,8 @@ function InventoryDetails() {
         );
       })}
       <InventoryParent inventory={inventory} setInventory={updateFields} />
+
+      <br></br>
 
       <div>
         <Modal
@@ -563,28 +541,6 @@ function InventoryDetails() {
                         </TableCell>
 
                         <TableCell sx={{ border: "1px solid #A9A9A9" }}>
-                          {/* <TextField
-                            size="small"
-                            style={{ width: "140px" }}
-                            className="text-field"
-                            fullWidth
-                            type="date"
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
-                            InputProps={{
-                              inputProps: {
-                                pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
-                              },
-                            }}
-                            placeholder="Expiry Date"
-                            name="expiryDate"
-                            value={item.expiryDate}
-                            onChange={(e) =>
-                              setDrugItem(index, e.target.name, e.target.value)
-                            }
-                          /> */}
-
                           <FormControl fullWidth>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DemoContainer components={["DatePicker"]}>
@@ -697,23 +653,6 @@ function InventoryDetails() {
                             placeholder="Total Manufacturer Rate"
                             name="totalManufacturerRate"
                             value={item.totalManufacturerRate}
-                            onChange={(e) =>
-                              setDrugItem(index, e.target.name, e.target.value)
-                            }
-                            disabled={true}
-                          />
-                        </TableCell>
-
-                        <TableCell sx={{ border: "1px solid #A9A9A9" }}>
-                          <TextField
-                            size="small"
-                            style={{ width: "140px" }}
-                            className="text-field"
-                            fullWidth
-                            type="number"
-                            placeholder="Net Amount"
-                            name="netAmount"
-                            value={item.netAmount}
                             onChange={(e) =>
                               setDrugItem(index, e.target.name, e.target.value)
                             }

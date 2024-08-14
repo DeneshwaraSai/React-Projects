@@ -105,7 +105,7 @@ function InventoryParent({ inventory, setInventory }: PropInventory) {
             </div>
 
             <div className="row">
-              <div className="col">
+              {/* <div className="col">
                 <TextField
                   fullWidth
                   type="number"
@@ -120,7 +120,7 @@ function InventoryParent({ inventory, setInventory }: PropInventory) {
                   placeholder="Overall Discount Amount"
                   label="Overall Discount Amount"
                 />
-              </div>
+              </div> */}
 
               <div className="col">
                 <TextField
@@ -131,10 +131,10 @@ function InventoryParent({ inventory, setInventory }: PropInventory) {
                   onChange={(e) => onChangeEvent(e.target.name, e.target.value)}
                   placeholder="Invoice Amount"
                   label="Invoice Amount"
+                  disabled={true}
                 />
               </div>
-            </div>
-            <div className="row">
+
               <div className="col">
                 <TextField
                   fullWidth
@@ -145,6 +145,7 @@ function InventoryParent({ inventory, setInventory }: PropInventory) {
                   label="Notes"
                 />
               </div>
+              <div className="col"></div>
             </div>
           </div>
         </Card>

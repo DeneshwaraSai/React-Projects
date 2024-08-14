@@ -2,22 +2,29 @@ import {
   Button,
   Card,
   FormControl,
+  IconButton,
   InputLabel,
+  Menu,
   MenuItem,
   Select,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import * as IoIcons from "react-icons/io";
 import * as FaIcons from "react-icons/fa";
 import * as MdIcons from "react-icons/md";
+import * as PiIcons from "react-icons/pi";
+
 import "./InventoryDashboard.style.css";
 import store from "../../Store/store";
 import { CodeValue } from "../../Cache/Cache.types";
-import { InventorySearch } from "./Inventory.type";
+import { InventoryDashboardType, InventorySearch } from "./Inventory.type";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
+import { AgGridReact } from "ag-grid-react";
+import moment from "moment";
 
 function InventoryDashboard() {
   const inventorySearchInitialState: InventorySearch = {
@@ -29,16 +36,24 @@ function InventoryDashboard() {
   };
 
   const navigate = useNavigate();
-  const [statusCodeValue, setStatusCodeValue] = useState<CodeValue[]>([]);
+  const [inventoryStatusCodeValue, setInventoryStatusCodeValue] = useState<
+    CodeValue[]
+  >([]);
   const [inventorySearch, setInventorySearch] = useState<InventorySearch>(
     inventorySearchInitialState
   );
+  const [rowData, setRowData] = useState<InventoryDashboardType[]>([]);
+  const [gridApi, setGridApi] = useState<any>(null);
+  const [selectedData, setSelectedData] = useState<InventoryDashboardType[]>(
+    []
+  );
+  const [menuOpen, setMenuOpen] = React.useState(false);
 
   useEffect(() => {
     store
       .getState()
       .cacheReducer.then((res) => {
-        setStatusCodeValue(
+        setInventoryStatusCodeValue(
           res.codeValue["INVENTORY_STATUS"]
             ? res.codeValue["INVENTORY_STATUS"]
             : []
@@ -56,6 +71,25 @@ function InventoryDashboard() {
       .get(PHARMACY_HOST_NAME + EndPoints.INVENTORY_DASHBOARD)
       .then((res) => {
         console.log(res.data);
+        const data: InventoryDashboardType[] = [
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+          res.data[0],
+        ];
+
+        setRowData(data);
       })
       .catch((err) => {
         console.log(err);
@@ -78,7 +112,91 @@ function InventoryDashboard() {
   };
 
   const updateInventory = () => {
-    navigate(`/inventory/update/1`);
+    // navigate(`/inventory/update/1`);
+    console.log(selectedData);
+  };
+
+  const colDefs: any[] = [
+    {
+      width: 50,
+      checkboxSelection: true,
+      headerCheckboxSelection: true,
+    },
+    { headerName: "Supplier Name", field: "supplierCode" },
+    { headerName: "Inventory Number", field: "inventoryNumber", width: 150 },
+    { headerName: "Invoice Number", field: "invoiceNumber", width: 140 },
+    {
+      headerName: "Invoice Date",
+      field: "invoiceDate",
+      valueGetter: (params: any) => {
+        return moment(params.data.invoiceDate).format("DD MMM YYYY");
+      },
+      width: 140,
+    },
+    { headerName: "Invoice Amount", field: "invoiceAmt", width: 140 },
+    { headerName: "Created By", field: "createdBy" },
+    {
+      headerName: "Status",
+      field: "status",
+      width: 150,
+      valueGetter: (params: any) => {
+        for (let codeValue of inventoryStatusCodeValue) {
+          if (codeValue.code === params.data.status) {
+            return codeValue.value;
+          }
+        }
+        return params.data.status;
+      },
+    },
+
+    {
+      headerName: "",
+      field: "",
+      width: 100,
+      cellRenderer: () => {
+        return (
+          <div>
+            <IconButton onClick={() => setMenuOpen(!menuOpen)}>
+              <PiIcons.PiDotsThreeOutlineVerticalFill />
+            </IconButton>
+            {menuOpen && (
+              <div
+                className="menu"
+                style={{
+                  position: "absolute",
+                  top: "30px",
+                  right: "0",
+                  backgroundColor: "#fff",
+                  border: "1px solid #ddd",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <div className="menu-item">Menu Item 1</div>
+                <div className="menu-item">Menu Item 2</div>
+                <div className="menu-item">Menu Item 3</div>
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+  ];
+
+  const gridOptions = {
+    columnDefs: colDefs,
+    checkboxSelection: true,
+    onFirstDataRendered: (params: any) => {
+      params.api.sizeColumnsToFit();
+    },
+    onGridReady: (params: any) => {
+      setGridApi(params.api);
+    },
+    onSelectionChanged: (params: any) => {
+      const selectedRows = params.api.getSelectedRows();
+      setSelectedData(selectedRows);
+    },
   };
 
   return (
@@ -155,8 +273,8 @@ function InventoryDashboard() {
                     onChangeSearch(e.target.name, e.target.value)
                   }
                 >
-                  {statusCodeValue.length > 0 &&
-                    statusCodeValue.map((item, index) => {
+                  {inventoryStatusCodeValue.length > 0 &&
+                    inventoryStatusCodeValue.map((item, index) => {
                       return (
                         <MenuItem key={index} value={item.code + ""}>
                           {item.value}
@@ -164,7 +282,7 @@ function InventoryDashboard() {
                       );
                     })}
 
-                  {statusCodeValue.length === 0 && (
+                  {inventoryStatusCodeValue.length === 0 && (
                     <MenuItem key={0}> No Options </MenuItem>
                   )}
                 </Select>
@@ -181,8 +299,7 @@ function InventoryDashboard() {
                     variant="contained"
                     onClick={() => submitInventorySearch()}
                   >
-                    {" "}
-                    Submit{" "}
+                    Submit
                   </Button>
                 </div>
               </div>
@@ -205,6 +322,7 @@ function InventoryDashboard() {
           <Button
             variant="contained"
             onClick={() => updateInventory()}
+            disabled={!(selectedData && selectedData.length === 1)}
             startIcon={<FaIcons.FaEdit />}
           >
             Update
@@ -215,13 +333,27 @@ function InventoryDashboard() {
             variant="outlined"
             startIcon={<MdIcons.MdDelete />}
             color="error"
+            disabled={!(selectedData && selectedData.length === 1)}
           >
             Delete
           </Button>
         </div>
       </div>
       <br></br> <br></br> <br></br>
-      <Card style={{ padding: "10px" }}> Table </Card>
+      <Card style={{ padding: "10px" }}>
+        <div className="ag-theme-quartz" style={{ width: "100%", padding: 6 }}>
+          <AgGridReact
+            rowData={rowData}
+            columnDefs={colDefs}
+            domLayout={"autoHeight"}
+            pagination={true}
+            paginationPageSize={5}
+            defaultColDef={{ resizable: true }}
+            suppressAutoSize={true}
+            gridOptions={gridOptions}
+          />
+        </div>
+      </Card>
     </div>
   );
 }
