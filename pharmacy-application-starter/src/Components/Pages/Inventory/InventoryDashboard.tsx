@@ -1,6 +1,7 @@
 import {
   Button,
   Card,
+  Fade,
   FormControl,
   IconButton,
   InputLabel,
@@ -8,13 +9,12 @@ import {
   MenuItem,
   Select,
   TextField,
-  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import * as IoIcons from "react-icons/io";
 import * as FaIcons from "react-icons/fa";
 import * as MdIcons from "react-icons/md";
-import * as PiIcons from "react-icons/pi";
+import * as BsIcons from "react-icons/bs";
 
 import "./InventoryDashboard.style.css";
 import store from "../../Store/store";
@@ -48,6 +48,17 @@ function InventoryDashboard() {
     []
   );
   const [menuOpen, setMenuOpen] = React.useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     store
@@ -146,40 +157,6 @@ function InventoryDashboard() {
           }
         }
         return params.data.status;
-      },
-    },
-
-    {
-      headerName: "",
-      field: "",
-      width: 100,
-      cellRenderer: () => {
-        return (
-          <div>
-            <IconButton onClick={() => setMenuOpen(!menuOpen)}>
-              <PiIcons.PiDotsThreeOutlineVerticalFill />
-            </IconButton>
-            {menuOpen && (
-              <div
-                className="menu"
-                style={{
-                  position: "absolute",
-                  top: "30px",
-                  right: "0",
-                  backgroundColor: "#fff",
-                  border: "1px solid #ddd",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <div className="menu-item">Menu Item 1</div>
-                <div className="menu-item">Menu Item 2</div>
-                <div className="menu-item">Menu Item 3</div>
-              </div>
-            )}
-          </div>
-        );
       },
     },
   ];
@@ -337,6 +314,31 @@ function InventoryDashboard() {
           >
             Delete
           </Button>
+        </div>
+        <div>
+          <IconButton
+            id="fade-button"
+            aria-controls={open ? "fade-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            <BsIcons.BsThreeDotsVertical />
+          </IconButton>
+          <Menu
+            id="fade-menu"
+            MenuListProps={{
+              "aria-labelledby": "fade-button",
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            TransitionComponent={Fade}
+          >
+            <MenuItem onClick={handleClose}> Mark as Completed </MenuItem>
+            <MenuItem onClick={handleClose}> Mark as Pending </MenuItem>
+            <MenuItem onClick={handleClose}> Logout </MenuItem>
+          </Menu>
         </div>
       </div>
       <br></br> <br></br> <br></br>
