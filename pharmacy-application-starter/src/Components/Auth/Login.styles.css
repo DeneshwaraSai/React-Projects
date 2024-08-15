@@ -1,0 +1,41 @@
+.body-page {
+  width: 100% !important;
+  height: 100vh;
+  justify-content: center;
+  justify-items: center;
+}
+
+.main-class {
+  display: flex;
+  width: 100%;
+}
+
+.image-class {
+  padding: 0;
+  margin: 0;
+  width: 70%;
+  /* background: url("image\ copy.png") no-repeat center;
+  background-size: cover;  */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plus-image {
+  background-size: cover;
+  width: 80%;
+  height: 90vh;
+}
+
+.right-side {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+}
+
+.right-side-content {
+  text-align: center;
+  width: 70%;
+}
