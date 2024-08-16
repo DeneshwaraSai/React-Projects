@@ -47,8 +47,6 @@ function InventoryDashboard() {
   const [selectedData, setSelectedData] = useState<InventoryDashboardType[]>(
     []
   );
-  const [menuOpen, setMenuOpen] = React.useState(false);
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 

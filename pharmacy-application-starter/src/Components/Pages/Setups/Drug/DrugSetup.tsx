@@ -14,10 +14,12 @@ import store from "../../../Store/store";
 import { CodeValue, TaxCategory } from "../../../Cache/Cache.types";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../../common/endPoints";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { drugInfoInitialState } from "./Drug.initialState";
 
 function DrugSetup() {
+  const params = useParams();
+  console.log(params);
   const navigate = useNavigate();
   const [taxCategory, setTaxCategory] = useState<TaxCategory[]>([]);
   const [drugTypeCodeValue, setDrugTypeCodeValue] = useState<CodeValue[]>([]);
@@ -39,6 +41,20 @@ function DrugSetup() {
         }
       })
       .catch((err) => err);
+
+    if (params["id"]) {
+      axios
+        .get(
+          PHARMACY_HOST_NAME +
+            EndPoints.FIND_DRUG_BY_ID.replace("{id}", params["id"])
+        )
+        .then((res) => {
+          setDruginfo(res.data);
+        })
+        .then((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   const [drugInfo, setDruginfo] = useState(drugInfoInitialState);
@@ -63,9 +79,14 @@ function DrugSetup() {
 
   const onDrugInfoSubmit = () => {
     console.log(drugInfo);
+    let url;
+    if (params["id"]) {
+      url = axios.put(PHARMACY_HOST_NAME + EndPoints.UPDATE_DRUG, drugInfo);
+    } else {
+      url = axios.post(PHARMACY_HOST_NAME + EndPoints.SAVE_DRUG, drugInfo);
+    }
 
-    axios
-      .post(PHARMACY_HOST_NAME + EndPoints.SAVE_DRUG, drugInfo)
+    url
       .then((res) => {
         console.log(res);
       })
@@ -84,9 +105,9 @@ function DrugSetup() {
     }
   };
 
-  const backToDashboard =()=>{
-    navigate('/Setups/Drug/Dashboard')
-  }
+  const backToDashboard = () => {
+    navigate("/Setups/Drug/Dashboard");
+  };
 
   return (
     <div className="drug">
@@ -105,14 +126,6 @@ function DrugSetup() {
             </div>
 
             <div className="col">
-              {/* <TextField
-                fullWidth
-                value={drugInfo.type}
-                placeholder="Drug Type"
-                label="Drug Type"
-                onChange={(event) => onChangeInput("type", event.target.value)}
-              /> */}
-
               <FormControl fullWidth>
                 <InputLabel id="Drug-Type"> Drug Type </InputLabel>
                 <Select
@@ -281,11 +294,13 @@ function DrugSetup() {
         <div>
           <div className="button-style">
             <div className="button-padding">
-              <Button variant="outlined" onClick={()=> backToDashboard()}> Cancel </Button>
+              <Button variant="outlined" onClick={() => backToDashboard()}>
+                Cancel
+              </Button>
             </div>
             <div className="button-padding">
               <Button variant="contained" onClick={() => onDrugInfoSubmit()}>
-                Submit
+                {params["id"] ? "update" : "submit"}
               </Button>
             </div>
           </div>

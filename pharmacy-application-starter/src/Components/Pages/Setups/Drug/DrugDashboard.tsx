@@ -1,14 +1,6 @@
 import {
   Button,
   Card,
-  Checkbox,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
@@ -23,13 +15,15 @@ import { EndPoints, PHARMACY_HOST_NAME } from "../../../common/endPoints";
 import "./DrugDashboard.style.css";
 import { DrugInfo } from "./DrugInfo.type";
 import store from "../../../Store/store";
+import { AgGridReact } from "ag-grid-react";
 
 function DrugDashboard() {
   const navigate = useNavigate();
   const [typeCodeValue, setTypeCodeValue] = useState<CodeValue[]>([]);
   const [statusCodeValue, setStatusCodeValue] = useState<CodeValue[]>([]);
   const [drugList, setDrugList] = useState<DrugInfo[]>([]);
-
+  const [gridApi, setGridApi] = useState<any>(null);
+  const [selectedData, setSelectedData] = useState<DrugInfo[]>([]);
   const goToCreate = () => {
     navigate("/Setups/Drug/create");
   };
@@ -45,14 +39,13 @@ function DrugDashboard() {
         if (res && res.codeValue) {
           setTypeCodeValue(res.codeValue["DRUG_TYPE"]);
           setStatusCodeValue(res.codeValue["DRUG_STATUS"]);
-        }
-      })
-      .catch((err) => console.log(err));
 
-    axios(PHARMACY_HOST_NAME + EndPoints.DRUG_LIST)
-      .then((res) => {
-        console.log(res.data);
-        setDrugList(res.data);
+          axios(PHARMACY_HOST_NAME + EndPoints.DRUG_LIST)
+            .then((res) => {
+              setDrugList(res.data);
+            })
+            .catch((err) => console.log(err));
+        }
       })
       .catch((err) => console.log(err));
   }, []);
@@ -62,18 +55,74 @@ function DrugDashboard() {
   };
 
   const getTypeByCode = (code: String) => {
-    const codeValue = typeCodeValue.find((item) => item.code === code);
+    const codeValue = typeCodeValue?.find((item) => item.code === code);
     return codeValue ? codeValue.value : code;
   };
 
   const getStatusByCode = (code: string) => {
-    const codeValue = statusCodeValue.find((item) => item.code === code);
+    const codeValue = statusCodeValue?.find((item) => item.code === code);
     return codeValue ? codeValue.value : code;
   };
 
-  const handleCheckBox = (index: number, item: DrugInfo) => {
-    console.log(index);
-    console.log(item);
+  const updateSelectedNode = () => {
+    navigate(`/Setups/Drug/update/${selectedData[0].id}`);
+  };
+
+  const columnDefs: any[] = [
+    {
+      width: 50,
+      checkboxSelection: true,
+      headerCheckboxSelection: true,
+    },
+    {
+      field: "name",
+      headerName: "Name",
+    },
+    {
+      field: "type",
+      headerName: "Type",
+      valueGetter: (params: any) => {
+        return getTypeByCode(params.data.type);
+      },
+    },
+    {
+      field: "hsnCode",
+      headerName: "HSN Code",
+    },
+    {
+      field: "cgst",
+      headerName: "CGST %",
+    },
+    {
+      field: "sgst",
+      headerName: "SGST %",
+    },
+    {
+      field: "genericName",
+      headerName: "Generic Name",
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      valueGetter: (params: any) => {
+        return getStatusByCode(params.data.status);
+      },
+    },
+  ];
+
+  const gridOptions = {
+    columnDefs: columnDefs,
+    checkboxSelection: true,
+    onFirstDataRendered: (params: any) => {
+      params.api.sizeColumnsToFit();
+    },
+    onGridReady: (params: any) => {
+      setGridApi(params.api);
+    },
+    onSelectionChanged: (params: any) => {
+      const selectedRows = params.api.getSelectedRows();
+      setSelectedData(selectedRows);
+    },
   };
 
   return (
@@ -92,21 +141,21 @@ function DrugDashboard() {
         <div style={{ display: "flex", float: "right" }}>
           <div className="adjust-button">
             <Button
-              variant="contained"
-              onClick={() => goToCreate()}
-              startIcon={<FaIcons.FaEdit />}
-            >
-              Update
-            </Button>
-          </div>
-
-          <div className="adjust-button">
-            <Button
               startIcon={<IoIcons.IoMdAddCircle />}
               variant="contained"
               onClick={() => goToUpdate()}
             >
               Create
+            </Button>
+          </div>
+
+          <div className="adjust-button">
+            <Button
+              variant="contained"
+              onClick={() => updateSelectedNode()}
+              startIcon={<FaIcons.FaEdit />}
+            >
+              Update
             </Button>
           </div>
 
@@ -125,49 +174,19 @@ function DrugDashboard() {
       <br></br>
       <br></br>
 
-      {/* <DrugTable></DrugTable> */}
-
-      <Card style={{ padding: "12px" }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 300 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell> </TableCell>
-                <TableCell> Name </TableCell>
-                <TableCell> Type </TableCell>
-                <TableCell> HSN Code </TableCell>
-                <TableCell> CGST % </TableCell>
-                <TableCell> SGST % </TableCell>
-                <TableCell> Generic Name </TableCell>
-                <TableCell> Status </TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {drugList.map((item: DrugInfo, index: number) => {
-                return (
-                  <TableRow key={index + 1}>
-                    <TableCell>
-                      <Checkbox
-                        onChange={() => {
-                          handleCheckBox(index, item);
-                        }}
-                        style={{ padding: "0", margin: "0" }}
-                      ></Checkbox>
-                    </TableCell>
-                    <TableCell> {item.name} </TableCell>
-                    <TableCell> {getTypeByCode(item.type + "")} </TableCell>
-                    <TableCell> {item.hsnCode} </TableCell>
-                    <TableCell> {item.cgst} </TableCell>
-                    <TableCell> {item.sgst} </TableCell>
-                    <TableCell> {item.genericName} </TableCell>
-                    <TableCell> {getStatusByCode(item.status + "")} </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <Card style={{ padding: "10px" }}>
+        <div className="ag-theme-quartz" style={{ width: "100%", padding: 6 }}>
+          <AgGridReact
+            rowData={drugList}
+            columnDefs={columnDefs}
+            domLayout={"autoHeight"}
+            gridOptions={gridOptions}
+            pagination={true}
+            paginationPageSize={10}
+            defaultColDef={{ resizable: true }}
+            suppressAutoSize={true}
+          />
+        </div>
       </Card>
     </div>
   );
