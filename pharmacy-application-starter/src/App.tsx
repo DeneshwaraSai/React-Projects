@@ -32,7 +32,7 @@ function App() {
           <Router>
             <NavigationBar />
             <Routes>
-            <Route path="/" Component={Home} />
+              <Route path="/" Component={Home} />
               <Route path="/home" Component={Home} />
               <Route path="/PatientRegistration" Component={PatientReg} />
               <Route path="/inventory" Component={Inventory} />
@@ -48,6 +48,10 @@ function App() {
                 Component={SupplierDashboard}
               />
               <Route path="/Setups/Supplier/create" Component={SupplierSetup} />
+              <Route
+                path="/Setups/Supplier/update/:id"
+                Component={SupplierSetup}
+              />
 
               <Route path="/inventory/create" Component={InventoryDetails} />
               <Route

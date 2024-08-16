@@ -17,7 +17,7 @@ import "./SupplierSetup.style.css";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../../common/endPoints";
 import { ErrorMessage, SnackbarType } from "../../../common/GlobalTypes";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function SupplierSetup() {
   const supplierInitialState: Supplier = {
@@ -46,6 +46,7 @@ function SupplierSetup() {
   };
 
   const navigate = useNavigate();
+  const params = useParams();
   const [statusCodeValue, setStatusCodeValue] = useState<CodeValue[]>([]);
   const [supplier, setSupplier] = useState<Supplier>(supplierInitialState);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>(
@@ -56,10 +57,20 @@ function SupplierSetup() {
     useState<SnackbarType>(snackbarInitialState);
 
   useEffect(() => {
+    if (params && params["id"]) {
+      axios
+        .get(
+          PHARMACY_HOST_NAME +
+            EndPoints.SUPPLIER_FIND_BY_ID.replace("{id}", params["id"])
+        )
+        .then((res) => setSupplier(res.data))
+        .catch((err) => console.log(err));
+    }
+
     store.getState().cacheReducer.then((res) => {
       setStatusCodeValue(res.codeValue["COMMON_STATUS"]);
     });
-  });
+  }, []);
 
   const onChangeSupplier = (field: string, value: String | Number | null) => {
     setSupplier({
@@ -109,8 +120,20 @@ function SupplierSetup() {
     setErrorMessage(errorMessageInitialState);
     setSnackbar(snackbarInitialState);
     if (validateSupplier()) {
-      axios
-        .post(PHARMACY_HOST_NAME + EndPoints.SUPPLIER_CREATE, supplier)
+      let uri;
+      if (params["id"]) {
+        uri = axios.put(
+          PHARMACY_HOST_NAME + EndPoints.SUPPLIER_UPDATE,
+          supplier
+        );
+      } else {
+        uri = axios.post(
+          PHARMACY_HOST_NAME + EndPoints.SUPPLIER_CREATE,
+          supplier
+        );
+      }
+
+      uri
         .then((res) => {
           console.log(res.data);
           setSnackbar({
@@ -169,7 +192,12 @@ function SupplierSetup() {
         {errorMessage.show &&
           errorMessage.messageList.map((item, index) => {
             return (
-              <Alert style={{'marginBottom': '12px'}} key={index} variant="filled" severity="error">
+              <Alert
+                style={{ marginBottom: "12px" }}
+                key={index}
+                variant="filled"
+                severity="error"
+              >
                 {item}
               </Alert>
             );
@@ -335,7 +363,7 @@ function SupplierSetup() {
             </div>
             <div className="button-padding">
               <Button variant="contained" onClick={() => submitSupplier()}>
-                Submit
+                {params["id"] ? "Update" : "Submit"}
               </Button>
             </div>
           </div>
