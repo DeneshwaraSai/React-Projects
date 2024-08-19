@@ -213,11 +213,12 @@ function PatientDetails() {
 
       <h2> Patient Details </h2>
       <Card variant="outlined" className="mat-card">
-        <div className="container">
+        <div className="">
           <div className="row">
             <div className="col">
               <TextField
                 label="First name"
+                fullWidth
                 value={patient.firstName}
                 id="first-name"
                 placeholder="First name"
@@ -234,6 +235,7 @@ function PatientDetails() {
 
             <div className="col">
               <TextField
+                fullWidth
                 label="Last name"
                 value={patient.lastName}
                 id="last-name"
@@ -255,6 +257,7 @@ function PatientDetails() {
                 <Select
                   labelId="gender"
                   id="gender"
+                  fullWidth
                   label="Gender"
                   placeholder="Gender"
                   className="width-280"
@@ -288,6 +291,7 @@ function PatientDetails() {
                 type="number"
                 value={patient.phoneNumber}
                 placeholder="Phone Number"
+                fullWidth
                 variant="outlined"
                 className="width-280"
                 inputProps={{
@@ -306,6 +310,7 @@ function PatientDetails() {
                 id="dob"
                 variant="outlined"
                 className="width-280"
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -329,6 +334,7 @@ function PatientDetails() {
                 id="Email"
                 variant="outlined"
                 placeholder="john@gmail.com"
+                fullWidth
                 className="width-280"
                 inputProps={{
                   required: true,

@@ -12,7 +12,7 @@ function SetupDashboard() {
   };
 
   return (
-    <div className="container">
+    <div className="">
       <div className="row">
         {setupInfo.map((item, index) => (
           <div className="col-20" key={index}>

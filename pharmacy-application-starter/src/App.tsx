@@ -61,55 +61,8 @@ function App() {
             </Routes>
           </Router>
         )}
-
-        {/* <Router>
-          <NavigationBar />
-          <Routes>
-            <Route path="/home" Component={Home} />
-            <Route path="/PatientRegistration" Component={PatientReg} />
-            <Route path="/inventory" Component={Inventory} />
-            <Route path="/order" Component={Order} />
-
-            <Route path="/Setups" Component={setups} />
-            <Route path="/Setups/Drug/Dashboard" Component={DrugDashboard} />
-            <Route path="/Setups/Drug/create" Component={DrugSetup} />
-            <Route path="/Setups/Drug/update/:id" Component={DrugSetup} />
-            <Route
-              path="/Setups/Supplier/Dashboard"
-              Component={SupplierDashboard}
-            />
-            <Route path="/Setups/Supplier/create" Component={SupplierSetup} />
-
-            <Route path="/inventory/create" Component={InventoryDetails} />
-            <Route path="/inventory/update/:id" Component={InventoryDetails} />
-          </Routes>
-        </Router> */}
       </Provider>
-      {/* <Provider store={store}>
-        <Router>
-          <NavigationBar />
-          <Routes>
-            <Route path="/" Component={Home} />
-            <Route path="/home" Component={Home} />
-            <Route path="/PatientRegistration" Component={PatientReg} />
-            <Route path="/inventory" Component={Inventory} />
-            <Route path="/order" Component={Order} />
-
-            <Route path="/Setups" Component={setups} />
-            <Route path="/Setups/Drug/Dashboard" Component={DrugDashboard} />
-            <Route path="/Setups/Drug/create" Component={DrugSetup} />
-            <Route path="/Setups/Drug/update/:id" Component={DrugSetup} />
-            <Route
-              path="/Setups/Supplier/Dashboard"
-              Component={SupplierDashboard}
-            />
-            <Route path="/Setups/Supplier/create" Component={SupplierSetup} />
-
-            <Route path="/inventory/create" Component={InventoryDetails} />
-            <Route path="/inventory/update/:id" Component={InventoryDetails} />
-          </Routes>
-        </Router>
-      </Provider> */}
+     
     </>
   );
 }
