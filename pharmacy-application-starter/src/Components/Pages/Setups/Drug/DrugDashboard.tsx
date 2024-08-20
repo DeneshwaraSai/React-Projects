@@ -2,7 +2,6 @@ import {
   Button,
   Card,
 } from "@mui/material";
-
 import { useEffect, useState } from "react";
 import * as FaIcons from "react-icons/fa";
 import * as IoIcons from "react-icons/io";
@@ -24,9 +23,6 @@ function DrugDashboard() {
   const [drugList, setDrugList] = useState<DrugInfo[]>([]);
   const [gridApi, setGridApi] = useState<any>(null);
   const [selectedData, setSelectedData] = useState<DrugInfo[]>([]);
-  const goToCreate = () => {
-    navigate("/Setups/Drug/create");
-  };
 
   const goToUpdate = () => {
     navigate("/Setups/Drug/create");
