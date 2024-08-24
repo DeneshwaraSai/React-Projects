@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import OrderInfo from "./Order/OrderInfo";
+import OrderDetails from "./Order/OrderDetails";
 
 function Order() {
   return (
-    <div className='order'>
+    <div className="order">
       <h2> Order </h2>
+      <OrderInfo /> 
     </div>
-  )
+  );
 }
 
-export default Order
+export default Order;

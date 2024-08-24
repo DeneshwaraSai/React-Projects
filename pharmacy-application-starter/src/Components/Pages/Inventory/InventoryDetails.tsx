@@ -404,7 +404,6 @@ function InventoryDetails() {
         open={snackbar.show}
         autoHideDuration={5000}
         onClose={() => closeSnackbar()}
-        message="gtrthjrghjhthyj"
       >
         <Alert onClose={() => {}} variant="filled" severity={snackbar.type}>
           {snackbar.message}
