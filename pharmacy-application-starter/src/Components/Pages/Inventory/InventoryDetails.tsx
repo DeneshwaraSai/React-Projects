@@ -80,8 +80,7 @@ function InventoryDetails() {
   }, []);
 
   const validateInventory = (): boolean => {
-    console.log(inventory);
-    console.log(dataSource);
+
     const errors: String[] = [];
 
     if (StringSupport.isBlank(inventory.supplierCode)) {

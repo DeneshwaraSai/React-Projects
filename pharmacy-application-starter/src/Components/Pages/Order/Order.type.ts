@@ -7,6 +7,10 @@ export type OrderInfo = {
   lastModifiedDate: Date;
   uhid: number;
   status: string;
+  amountPaid: number;
+  dueAmount: number;
+  createdBy: string;
+  lastModifiedBy: string;
   orderDetails: OrderItems[];
 };
 
@@ -26,4 +30,19 @@ export type OrderItems = {
   billReceivableDetailsId: string;
   sgst: number; // Transient
   cgst: number; // Transient
+};
+
+export type InventorySearchDto = {
+  batchNumber: string;
+  cgst: number;
+  drugCode: number;
+  drugName: string;
+  expiryDate: Date;
+  hsnCode: string;
+  quantity: number;
+  sellingCost: number;
+  sgst: number;
+  supplierCode: string;
+  supplierName: string;
+  totalSellingCost: number;
 };

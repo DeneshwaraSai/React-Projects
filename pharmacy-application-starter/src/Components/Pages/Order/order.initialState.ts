@@ -19,15 +19,16 @@ export const initialOrderItems: OrderItems = {
 };
 
 export const orderTableHeaders: string[] = [
-    "Name",
-    "Supplier",
-    "Batch Number",
-    "Hsn Code",
-    "Expiry Date",
-    "Quantity",
-    "Price",
-    "Total Price",
-    "Discount %",
-    "Discount Amount",
-    "Net Amount",
-  ];
+  "Name",
+  "Supplier",
+  "Batch Number",
+  "Hsn Code",
+  "Expiry Date",
+  "Quantity",
+  "Price",
+  "Total Price",
+  "Discount %",
+  "Discount Amount",
+  "Net Amount",
+  "",
+];
