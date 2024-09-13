@@ -98,7 +98,7 @@ function InventoryDashboard() {
           res.data[0],
         ];
 
-        setRowData(data);
+        setRowData(res.data);
       })
       .catch((err) => {
         console.log(err);

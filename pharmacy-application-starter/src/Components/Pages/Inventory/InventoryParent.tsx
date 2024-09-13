@@ -105,23 +105,6 @@ function InventoryParent({ inventory, setInventory }: PropInventory) {
             </div>
 
             <div className="row">
-              {/* <div className="col">
-                <TextField
-                  fullWidth
-                  type="number"
-                  placeholder="Overall Discount %"
-                  label="Overall Discount %"
-                />
-              </div>
-              <div className="col">
-                <TextField
-                  type="number"
-                  fullWidth
-                  placeholder="Overall Discount Amount"
-                  label="Overall Discount Amount"
-                />
-              </div> */}
-
               <div className="col">
                 <TextField
                   fullWidth
