@@ -15,8 +15,9 @@ export type OrderInfo = {
 };
 
 export type OrderItems = {
-  id: string;
+  id: string | null;
   supplierCode: string;
+  supplierName: string;
   batchNumber: string;
   drugId: string;
   drugName: string; // Transient
@@ -27,7 +28,8 @@ export type OrderItems = {
   totalPrice: number;
   discountAmount: number;
   discountPerc: number;
-  billReceivableDetailsId: string;
+  billReceivableDetailsId: string | null;
+  netAmount: number;
   sgst: number; // Transient
   cgst: number; // Transient
 };

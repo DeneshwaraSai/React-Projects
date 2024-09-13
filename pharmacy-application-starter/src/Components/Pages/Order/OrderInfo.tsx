@@ -1,11 +1,20 @@
-import { Button, FormControl } from "@mui/material";
+import { Autocomplete, Button, FormControl, TextField } from "@mui/material";
 import React from "react";
 import OrderDetails from "./OrderDetails";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import store from "../../Store/store";
+import { useSelector } from "react-redux";
 
 function OrderInfo() {
+  const orderState = useSelector((state: any) => state.orderReducer.orderState);
+  const submitOrderInfo = () => {
+    console.log(orderState);
+
+    console.log(store.getState().orderReducer.orderState);
+  };
+
   return (
     <div>
       <div className="row">
@@ -35,7 +44,11 @@ function OrderInfo() {
         <Button variant="outlined" style={{ margin: 5 }}>
           Cancel
         </Button>
-        <Button variant="contained" style={{ margin: 5 }}>
+        <Button
+          variant="contained"
+          onClick={submitOrderInfo}
+          style={{ margin: 5 }}
+        >
           Submit
         </Button>
       </div>

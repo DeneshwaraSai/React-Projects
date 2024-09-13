@@ -3,6 +3,7 @@ import { OrderItems } from "./Order.type";
 export const initialOrderItems: OrderItems = {
   id: "",
   supplierCode: "",
+  supplierName: "",
   batchNumber: "",
   drugId: "",
   drugName: "", // Transient
@@ -14,11 +15,13 @@ export const initialOrderItems: OrderItems = {
   discountAmount: 0,
   discountPerc: 0,
   billReceivableDetailsId: "",
+  netAmount: 0,
   sgst: 0, // Transient
   cgst: 0, // Transient
 };
 
 export const orderTableHeaders: string[] = [
+  "",
   "Name",
   "Supplier",
   "Batch Number",
