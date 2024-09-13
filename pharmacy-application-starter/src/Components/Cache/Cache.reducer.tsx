@@ -8,19 +8,19 @@ const initialState: ApplicationCache = {
 };
 
 const cacheReducer = async (state = initialState, action: CacheAction) => {
-  console.log("Cache Started");
+  // console.log("Cache Started");
 
   const categoriesList = await getCacheByURL(
     PHARMACY_HOST_NAME + EndPoints.GET_TAX_CATEGORY
   );
-  console.log(categoriesList);
+  // console.log(categoriesList);
 
   const codeValue = await getCacheByURL(
     PHARMACY_HOST_NAME + EndPoints.GET_CODE_VALUE
   );
-  console.log(codeValue);
+  // console.log(codeValue);
 
-  console.log("Cache Ended");
+  // console.log("Cache Ended");
 
   return await {
     ...state,
