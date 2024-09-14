@@ -29,6 +29,7 @@ export type Inventory = {
   invoiceAmt: Number;
   notes: string;
   inventoryNumber: Number;
+  status:String;
   inventoryDetails: InventoryItems[];
 };
 

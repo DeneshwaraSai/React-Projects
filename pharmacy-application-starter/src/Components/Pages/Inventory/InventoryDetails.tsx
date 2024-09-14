@@ -80,7 +80,6 @@ function InventoryDetails() {
   }, []);
 
   const validateInventory = (): boolean => {
-
     const errors: String[] = [];
 
     if (StringSupport.isBlank(inventory.supplierCode)) {
@@ -136,6 +135,12 @@ function InventoryDetails() {
       if (items.sellingCost.valueOf() <= 0) {
         errors.push(
           `Selling cost must be greater than zero for drugname ${items.drugName}.`
+        );
+      }
+
+      if (items.invoiceAmount.valueOf() > items.totalSellingCost.valueOf()) {
+        errors.push(
+          `Invoice amount must be greater than sellingCost for the drug name - ${items.drugName}.`
         );
       }
     });
@@ -456,7 +461,11 @@ function InventoryDetails() {
 
         <Card>
           <div style={{ float: "right", margin: "11px 6px 12px 0px" }}>
-            <Button variant="contained" onClick={() => add()}>
+            <Button
+              variant="contained"
+              onClick={() => add()}
+              disabled={inventory.status === "CO"}
+            >
               Add
             </Button>
           </div>
@@ -733,8 +742,12 @@ function InventoryDetails() {
           </Button>
         </div>
         <div style={{ marginLeft: 6 }}>
-          <Button variant="contained" onClick={() => onSubmit()}>
-            {params["id"] ? "update" : "submit"}
+          <Button
+            variant="contained"
+            onClick={() => onSubmit()}
+            disabled={inventory.status === "CO"}
+          >
+            {params["id"] ? "Update" : "Submit"}
           </Button>
         </div>
       </div>

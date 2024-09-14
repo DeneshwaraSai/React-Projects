@@ -28,6 +28,7 @@ export class EndPoints {
   static INVENTORY_UPDATE = "/inventory/update";
   static INVENTORY_FIND_BY_ID = "/inventory/{id}";
   static INVENTORY_DASHBOARD = "/inventory/dashboard";
+  static INVENTORY_UPDATE_STATUS = "/inventory/{id}/status/{status}";
 
   static ORDER_CREATE = "/order/create";
   static ORDER_UPDATE = "/order/update";

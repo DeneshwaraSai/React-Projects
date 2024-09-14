@@ -80,23 +80,6 @@ function InventoryDashboard() {
       .get(PHARMACY_HOST_NAME + EndPoints.INVENTORY_DASHBOARD)
       .then((res) => {
         console.log(res.data);
-        const data: InventoryDashboardType[] = [
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-          res.data[0],
-        ];
 
         setRowData(res.data);
       })
@@ -121,8 +104,8 @@ function InventoryDashboard() {
   };
 
   const updateInventory = () => {
-    // navigate(`/inventory/update/1`);
-    console.log(selectedData);
+    navigate(`/inventory/update/${selectedData[0].id}`);
+    // console.log(selectedData);
   };
 
   const colDefs: any[] = [
@@ -158,6 +141,27 @@ function InventoryDashboard() {
       },
     },
   ];
+
+  const changeStatus = (status: string) => {
+    console.log(selectedData);
+    axios
+      .put(
+        PHARMACY_HOST_NAME +
+          EndPoints.INVENTORY_UPDATE_STATUS.replace(
+            "{id}",
+            `${selectedData[0].id}`
+          ).replace("{status}", `${status}`),
+        selectedData[0]
+      )
+      .then((res) => {
+        console.log(res.data);
+        getDashboardDetails();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      handleClose()
+  };
 
   const gridOptions = {
     columnDefs: colDefs,
@@ -333,9 +337,8 @@ function InventoryDashboard() {
             onClose={handleClose}
             TransitionComponent={Fade}
           >
-            <MenuItem onClick={handleClose}> Mark as Completed </MenuItem>
-            <MenuItem onClick={handleClose}> Mark as Pending </MenuItem>
-            <MenuItem onClick={handleClose}> Logout </MenuItem>
+            <MenuItem onClick={()=> changeStatus("CO")}> Mark as Completed </MenuItem>
+            <MenuItem onClick={()=> changeStatus("P")}> Mark as Pending </MenuItem> 
           </Menu>
         </div>
       </div>

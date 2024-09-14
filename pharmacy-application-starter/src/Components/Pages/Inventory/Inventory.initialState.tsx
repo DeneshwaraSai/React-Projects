@@ -31,6 +31,7 @@ export const inventoryInitialState: Inventory = {
   notes: "",
   inventoryNumber: 0,
   inventoryDetails: [],
+  status: 'P'
 };
 
 export const TableHeaders = [
