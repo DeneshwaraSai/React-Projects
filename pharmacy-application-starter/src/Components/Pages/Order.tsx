@@ -1,6 +1,5 @@
 import React from "react";
-import OrderInfo from "./Order/OrderInfo";
-import OrderDetails from "./Order/OrderDetails";
+import OrderInfo from "./Order/OrderInfo"; 
 
 function Order() {
   return (

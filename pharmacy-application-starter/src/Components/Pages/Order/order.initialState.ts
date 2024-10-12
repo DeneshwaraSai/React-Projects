@@ -1,4 +1,20 @@
-import { OrderItems } from "./Order.type";
+import { Order, OrderItems } from "./Order.type";
+
+export const initialOrderInfo: Order = {
+  orderNumber: "",
+  sequenceNumber: "",
+  billNumber: "",
+  transactionId: "",
+  orderDate: new Date(),
+  lastModifiedDate: new Date(),
+  uhid: 0,
+  status: "P",
+  amountPaid: 0.0,
+  dueAmount: 0.0,
+  createdBy: "admin",
+  lastModifiedBy: "admin",
+  orderDetails: [],
+};
 
 export const initialOrderItems: OrderItems = {
   id: "",

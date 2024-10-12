@@ -1,4 +1,4 @@
-export type OrderInfo = {
+export type Order = {
   orderNumber: string;
   sequenceNumber: string;
   billNumber: string;
@@ -48,3 +48,30 @@ export type InventorySearchDto = {
   supplierName: string;
   totalSellingCost: number;
 };
+
+export const PAYMENT_TYPE = [
+  {
+    code: "CASH",
+    value: "Cash",
+  },
+  {
+    code: "CHQ",
+    value: "Cheque",
+  },
+  {
+    code: "NB",
+    value: "Net Banking",
+  },
+  {
+    code: "MB",
+    value: "Mobile Banking",
+  },
+  {
+    code: "DC",
+    value: "Debit Card",
+  },
+  {
+    code: "CC",
+    value: "Credit Card",
+  },
+];

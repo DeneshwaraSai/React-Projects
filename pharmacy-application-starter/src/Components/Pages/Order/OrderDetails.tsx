@@ -21,11 +21,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   ORDER_DETAILS_ADD,
   ORDER_DETAILS_CLEAR,
-  SET_ORDER_DERAILS_BY_FIELD_NAME,
   SET_ORDER_DETAILS_BY_INDEX,
 } from "./OrderRedux/Order.actions";
 import dayjs from "dayjs";
-import { StringSupport } from "../../common/StringSupport";
 
 function OrderDetails() {
   const dispatch = useDispatch();
@@ -48,22 +46,32 @@ function OrderDetails() {
     });
   };
 
-  const reCalculateAllByQuantity = (index: number) => {
+  const reCalculateUsingDiscounts = (
+    index: number,
+    fieldName: string,
+    fieldValue: any
+  ) => {
     setOrderItems((prevState: OrderItems[]) => {
       const state = [...prevState];
-      const taxes =
-        (state[index].totalPrice * state[index].sgst) / 100 +
-        (state[index].totalPrice * state[index].cgst) / 100;
+
+      let discountPerc: number = 0,
+        discountAmount = 0;
+
+      if (fieldName === "discountPerc") {
+        discountPerc = Number(fieldValue);
+        discountAmount = (state[index].totalPrice * discountPerc) / 100;
+      } else {
+        discountAmount = Number(fieldValue);
+        discountPerc = (discountAmount * 100) / state[index].totalPrice;
+      }
+
       state[index] = {
         ...state[index],
-        netAmount: Number(
-          parseFloat(
-            String(
-              state[index].totalPrice - state[index].discountAmount + taxes
-            )
-          ).toFixed(2)
-        ),
+        discountAmount: discountAmount,
+        discountPerc: discountPerc,
+        netAmount: state[index].totalPrice - discountAmount,
       };
+
       return state;
     });
   };
@@ -71,12 +79,18 @@ function OrderDetails() {
   const onDetailsChangeQuantity = (index: number, e: any) => {
     setOrderItems((prevState: OrderItems[]) => {
       const state = [...prevState];
+      const quantity: number = Number(e.target?.value);
+      const totalprice: number = Number(
+        parseFloat(String(state[index].unitPrice * quantity)).toFixed(2)
+      );
+
       state[index] = {
         ...state[index],
-        quantity: Number(e.target?.value),
-        totalPrice: state[index].unitPrice * e.target?.value,
+        quantity: quantity,
+        totalPrice: totalprice,
+        discountAmount: (totalprice * state[index].discountPerc) / 100,
         netAmount:
-          state[index].unitPrice * Number(e.target?.value) -
+          state[index].unitPrice * quantity -
           state[index].discountAmount +
           (state[index].totalPrice * state[index].sgst) / 100 +
           (state[index].totalPrice * state[index].cgst) / 100,
@@ -96,13 +110,13 @@ function OrderDetails() {
         <OrderSearch addDetails={addDetails}></OrderSearch>
       </div>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} key="tables">
         <Table>
           <TableHead style={{ height: "25px !important" }}>
             <TableRow>
               {orderTableHeaders &&
-                orderTableHeaders.map((item) => {
-                  return <TableCell> {item} </TableCell>;
+                orderTableHeaders.map((item, index) => {
+                  return <TableCell key={`key-${index}`}> {item} </TableCell>;
                 })}
             </TableRow>
           </TableHead>
@@ -212,7 +226,15 @@ function OrderDetails() {
                         type="number"
                         fullWidth
                         size="small"
+                        name="discountPerc"
                         value={item.discountPerc}
+                        onChange={(e) => {
+                          reCalculateUsingDiscounts(
+                            index,
+                            e.target.name,
+                            e.target.value
+                          );
+                        }}
                         placeholder="Discount %"
                       />
                     </TableCell>
@@ -223,6 +245,14 @@ function OrderDetails() {
                         value={item.discountAmount}
                         fullWidth
                         size="small"
+                        name="discountAmount"
+                        onChange={(e) => {
+                          reCalculateUsingDiscounts(
+                            index,
+                            e.target.name,
+                            e.target.value
+                          );
+                        }}
                         placeholder="Discount Amount"
                       />
                     </TableCell>
