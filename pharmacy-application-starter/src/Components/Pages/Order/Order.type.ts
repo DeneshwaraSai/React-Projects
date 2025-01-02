@@ -49,29 +49,31 @@ export type InventorySearchDto = {
   totalSellingCost: number;
 };
 
-export const PAYMENT_TYPE = [
-  {
-    code: "CASH",
-    value: "Cash",
-  },
-  {
-    code: "CHQ",
-    value: "Cheque",
-  },
-  {
-    code: "NB",
-    value: "Net Banking",
-  },
-  {
-    code: "MB",
-    value: "Mobile Banking",
-  },
-  {
-    code: "DC",
-    value: "Debit Card",
-  },
-  {
-    code: "CC",
-    value: "Credit Card",
-  },
-];
+export type CashReceipt = {
+  transactionId: string;
+  billNumber: string;
+  amountPaid: number;
+  paymentType: string;
+  bankName: string;
+  receiptType: string;
+  notes: string;
+  receivedDate: Date;
+  receivedBy: string;
+};
+
+export const initialCashReceipt: CashReceipt = {
+  transactionId: "",
+  billNumber: "",
+  amountPaid: 0,
+  paymentType: "",
+  bankName: "",
+  receiptType: "",
+  notes: "",
+  receivedDate: new Date(),
+  receivedBy: "",
+};
+
+export type OrderRequest = {
+  orderInfo: Order;
+  cashReceipt: CashReceipt;
+};

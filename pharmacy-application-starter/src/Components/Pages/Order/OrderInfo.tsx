@@ -1,32 +1,60 @@
 import {
+  Box,
   Button,
   FormControl,
   InputLabel,
-  ListItem,
   MenuItem,
   NativeSelect,
   Select,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OrderDetails from "./OrderDetails";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { useSelector } from "react-redux";
 import { initialOrderInfo } from "./order.initialState";
-import { Order, OrderItems, PAYMENT_TYPE } from "./Order.type";
+import {
+  CashReceipt,
+  initialCashReceipt,
+  Order,
+  OrderItems,
+  OrderRequest,
+} from "./Order.type";
 import dayjs from "dayjs";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
 import { AgGridReact } from "ag-grid-react";
+import store from "../../Store/store";
+import { CodeValue } from "../../Cache/Cache.types";
 
 function OrderInfo() {
   const [orderInfo, setOrderInfo] = useState<Order>(initialOrderInfo);
   const orderState = useSelector((state: any) => state.orderReducer.orderState);
   const [showPayment, setShowPayment] = useState<boolean>(false);
   const [orderItemDetails, setOrderItemDetails] = useState<OrderItems[]>([]);
+  const [cashReceipt, setCashReceipt] =
+    useState<CashReceipt>(initialCashReceipt);
   const [rowData, setRowData] = useState<OrderItems[]>([]);
+  const [paymentTypeCodeValue, setPaymentTypeCodeValue] = useState<CodeValue[]>(
+    []
+  );
+
+  useEffect(() => {
+    store
+      .getState()
+      .cacheReducer.then((res) => {
+        if (res) {
+          setPaymentTypeCodeValue(
+            res.codeValue["PAYMENT_TYPE"] ? res.codeValue["PAYMENT_TYPE"] : []
+          );
+        }
+      })
+      .catch((err) => {
+        throw new Error("Error while  fetching codeValues.");
+      });
+  }, []);
 
   const columnDefs: any[] = [
     {
@@ -36,6 +64,22 @@ function OrderInfo() {
     {
       field: "quantity",
       fieldValue: "quantity",
+    },
+    {
+      field: "Unit Price",
+      fieldValue: "unitPrice",
+    },
+    {
+      field: "Total Price",
+      fieldValue: "totalPrice",
+    },
+    {
+      field: "Discount %",
+      fieldValue: "discountPerc",
+    },
+    {
+      field: "Discount Amt",
+      fieldValue: "discountAmount",
     },
   ];
 
@@ -60,22 +104,32 @@ function OrderInfo() {
     console.log(orderState);
     console.log(orderInfo);
 
-    // await axios
-    //   .post(PHARMACY_HOST_NAME + EndPoints.ORDER_CREATE, orderInfo)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    const orderRequest: OrderRequest = {
+      cashReceipt: cashReceipt,
+      orderInfo: orderInfo,
+    };
+
+    try {
+      await axios
+        .post(PHARMACY_HOST_NAME + EndPoints.ORDER_CREATE, orderRequest)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      throw new Error("Error while  saving orders");
+    }
   };
 
   const goToPayment = async () => {
     await setOrderInfo({ ...orderInfo, orderDetails: orderState });
 
     setOrderItemDetails(orderState);
-    console.log(orderState);
-    console.log(orderItemDetails);
+
+    console.log(store.getState().orderReducer.orderState);
+
     setShowPayment(true);
   };
 
@@ -159,10 +213,10 @@ function OrderInfo() {
                     placeholder="Payment Type"
                     fullWidth
                   >
-                    {PAYMENT_TYPE &&
-                      PAYMENT_TYPE.map((codeValue) => {
+                    {paymentTypeCodeValue &&
+                      paymentTypeCodeValue.map((codeValue) => {
                         return (
-                          <MenuItem value={codeValue.code}>
+                          <MenuItem value={String(codeValue.code)}>
                             {codeValue.value}
                           </MenuItem>
                         );
@@ -219,19 +273,23 @@ function OrderInfo() {
             </div>
           </div>
 
-          <div>
+          <Box style={{ display: "flex", float: "right" }}>
             <div>
               <Button variant="outlined" onClick={backToOrder}>
                 Back
               </Button>
             </div>
 
-            <div>
-              <Button variant="contained" onClick={submitOrderInfo}>
+            <div className="ms-2">
+              <Button
+                variant="contained"
+                className="p2"
+                onClick={submitOrderInfo}
+              >
                 Submit
               </Button>
             </div>
-          </div>
+          </Box>
         </div>
       )}
     </div>
