@@ -11,7 +11,6 @@ function OrderSearch({ addDetails }: any) {
   const handleChange = (selectedOption: any) => {
     const option = selectedOption.value;
     console.log(option);
-    setSearchValue(null);
 
     const item: OrderItems = {
       id: null,
@@ -31,13 +30,18 @@ function OrderSearch({ addDetails }: any) {
       netAmount: option.sellingCost,
       sgst: option.sgst, // Transient
       cgst: option.cgst, // Transient
+      sgstAmount: 0,
+      cgstAmount: 0,
     };
+    console.log(searchValue);
+    setSearchValue(null);
     addDetails(item);
   };
 
   const onSearchInput = (event: any) => {
+
     const value: string = event.target?.value;
-    console.log(value);
+    setSearchValue(null);
     if (value.length >= 3) {
       axios
         .get(

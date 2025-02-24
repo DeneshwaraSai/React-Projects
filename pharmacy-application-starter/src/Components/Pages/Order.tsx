@@ -3,8 +3,7 @@ import OrderInfo from "./Order/OrderInfo";
 
 function Order() {
   return (
-    <div className="order">
-      <h2> Order </h2>
+    <div className="order"> 
       <OrderInfo /> 
     </div>
   );

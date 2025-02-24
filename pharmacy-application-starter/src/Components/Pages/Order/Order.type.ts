@@ -32,6 +32,8 @@ export type OrderItems = {
   netAmount: number;
   sgst: number; // Transient
   cgst: number; // Transient
+  sgstAmount: number; // Transient
+  cgstAmount: number; // Transient
 };
 
 export type InventorySearchDto = {
@@ -55,25 +57,39 @@ export type CashReceipt = {
   amountPaid: number;
   paymentType: string;
   bankName: string;
-  receiptType: string;
+  billAmount: number;
   notes: string;
   receivedDate: Date;
   receivedBy: string;
+  referenceNumber: string;
+  discountPerc: number;
+  discountAmount: number;
 };
 
 export const initialCashReceipt: CashReceipt = {
   transactionId: "",
   billNumber: "",
-  amountPaid: 0,
+  amountPaid: 0.0,
   paymentType: "",
   bankName: "",
-  receiptType: "",
+  billAmount: 0.0,
   notes: "",
   receivedDate: new Date(),
   receivedBy: "",
+  referenceNumber: "",
+  discountPerc: 0.0,
+  discountAmount: 0.0,
 };
 
 export type OrderRequest = {
   orderInfo: Order;
   cashReceipt: CashReceipt;
+};
+
+export type OrderState = {
+  orderInfo: Order;
+  cashReceipt: CashReceipt;
+  orderItems: OrderItems[];
+  showPayment: boolean;
+  errorMessage: string[];
 };

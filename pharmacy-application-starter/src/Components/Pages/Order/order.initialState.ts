@@ -34,6 +34,8 @@ export const initialOrderItems: OrderItems = {
   netAmount: 0,
   sgst: 0, // Transient
   cgst: 0, // Transient
+  sgstAmount: 0, // Transient
+  cgstAmount: 0, // Transient
 };
 
 export const orderTableHeaders: string[] = [
@@ -45,9 +47,9 @@ export const orderTableHeaders: string[] = [
   "Expiry Date",
   "Quantity",
   "Price",
-  "Total Price",
   "Discount %",
   "Discount Amount",
+  "Total Price",
+  "Taxes",
   "Net Amount",
-  "",
 ];
