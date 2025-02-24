@@ -32,7 +32,7 @@ function Home(props: any) {
   return (
     <div className="home">
       {patientHeaderNode}
-      <h2> Home </h2>
+      <h2 className="text-red-500"> Home </h2>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { Button, Card, FormControl, FormGroup, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const submit = () => {
     const credentials = { username: "admin", password: "password" };
     sessionStorage.setItem("login", JSON.stringify(credentials));
@@ -15,10 +15,7 @@ function Login() {
   return (
     <div className="main-class">
       <div className="image-class">
-        <img
-          className="plus-image"
-          src="https://seeklogo.com/images/P/plus-medical-health-logo-3318D9B08A-seeklogo.com.png"
-        />
+        <img className="plus-image" src="imagePlus.png" />
       </div>
 
       <div className="right-side">
