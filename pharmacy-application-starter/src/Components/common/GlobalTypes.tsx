@@ -9,6 +9,13 @@ export type SnackbarType = {
   message: string;
 };
 
+export enum SnackBarTypeEnum {
+ SUCCESS = "success",
+  ERROR  = "error",
+ INFO  = "info",
+ WARNING = "warning"
+}
+
 export type ErrorMessage = {
   show: boolean;
   messageList: string[];

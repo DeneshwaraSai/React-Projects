@@ -14,7 +14,7 @@ import {
 import { gender } from "./patient.constants";
 import { Patient } from "./patient.type";
 import axios from "axios";
-import { EndPoints } from "../../common/endPoints";
+import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
 import { ErrorMessage, SnackbarType } from "../../common/GlobalTypes";
 
 function PatientDetails() {
@@ -51,7 +51,7 @@ function PatientDetails() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/patient/list")
+      .get(PHARMACY_HOST_NAME + EndPoints.PATIENT_LIST)
       .then((response) => console.log(response))
       .catch((error) => console.log(error));
   }, []);

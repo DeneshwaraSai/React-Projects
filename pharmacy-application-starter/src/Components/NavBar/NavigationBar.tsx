@@ -50,7 +50,7 @@ function NavigationBar() {
   };
 
   const inputSearch = (value: string) => {
-    setPatientDropDown(() => []);
+    setPatientDropDown([]);
 
     console.log(value);
     if (value.length > 2) {
@@ -72,6 +72,7 @@ function NavigationBar() {
             };
           });
           console.log(patients);
+          setPatientDropDown([])
           setPatientDropDown(patients);
         })
         .catch((err) => console.log(err));

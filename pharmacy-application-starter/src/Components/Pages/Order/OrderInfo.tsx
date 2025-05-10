@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { initialCashReceipt, OrderItems, OrderState } from "./Order.type";
+import {
+  initialOrderState,
+  orderInfoColumnDefs,
+  OrderItems,
+  OrderState,
+} from "./Order.type";
 import {
   Alert,
   Box,
@@ -7,6 +12,8 @@ import {
   Checkbox,
   FormControl,
   Paper,
+  Snackbar,
+  SnackbarCloseReason,
   Table,
   TableBody,
   TableCell,
@@ -23,70 +30,16 @@ import OrderSearch from "./OrderSearch";
 import { orderTableHeaders } from "./order.initialState";
 import { AgGridReact } from "ag-grid-react";
 import OrderPayment from "./OrderPayment";
+import axios from "axios";
+import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
+import { SnackBarTypeEnum } from "../../common/GlobalTypes";
+import store from "../../Store/store";
+import { PatientHeaderContext } from "../../Header/PatientHeader.types";
 
 export class OrderInfo extends Component {
-  state: OrderState = {
-    orderInfo: {
-      orderNumber: "",
-      sequenceNumber: "",
-      billNumber: "",
-      transactionId: "",
-      orderDate: new Date(),
-      lastModifiedDate: new Date(),
-      uhid: 0,
-      status: "",
-      amountPaid: 0,
-      dueAmount: 0,
-      createdBy: "",
-      lastModifiedBy: "",
-      orderDetails: [],
-    },
-    cashReceipt: initialCashReceipt,
-    orderItems: [],
-    showPayment: false,
-    errorMessage: [],
-  };
-
-  columnDefs: any[] = [
-    {
-      field: "drugName",
-      fieldValue: "Drug Name",
-    },
-    {
-      field: "quantity",
-      fieldValue: "Quantity",
-    },
-    {
-      field: "unitPrice",
-      fieldValue: "Unit Price",
-    },
-    {
-      field: "totalPrice",
-      fieldValue: "Total Price",
-    },
-    {
-      field: "discountPerc",
-      fieldValue: "Discount %",
-    },
-    {
-      field: "discountAmount",
-      fieldValue: "Discount Amt",
-    },
-    {
-      field: "taxes",
-      fieldValue: "Taxes",
-      cellRenderer: (params: any) => {
-        const taxes =
-          Number(params.data.sgstAmount) + Number(params.data.cgstAmount);
-        return `${taxes}`;
-      },
-    },
-
-    {
-      field: "netAmount",
-      fieldValue: "Net Amount",
-    },
-  ];
+  state: OrderState = initialOrderState;
+  columnDefs: any[] = orderInfoColumnDefs;
+  patientHeaderContext: PatientHeaderContext = store.getState().patientReducer;
 
   defaultColDef = {
     editable: false,
@@ -140,14 +93,14 @@ export class OrderInfo extends Component {
     });
   };
 
-  validateForNext = () => {
-    this.setState({ errorMessage: [] });
+  validateForNext = async () => {
+    await this.setState({ errorMessage: [] });
 
     if (this.state.orderItems) {
       for (const items of this.state.orderItems) {
         if (items.quantity <= 0) {
-          this.setState((prevState: OrderState) => {
-            const errorMessage = `The quantity of ${items.drugName} cannot be 0.`;
+          await this.setState((prevState: OrderState) => {
+            const errorMessage = `The quantity of ${items.drugName} cannot be 0 or negative.`;
             if (!prevState.errorMessage.includes(errorMessage)) {
               prevState.errorMessage.push(errorMessage);
             }
@@ -155,7 +108,7 @@ export class OrderInfo extends Component {
           });
         }
         if (items.discountAmount < 0 || items.discountPerc < 0) {
-          this.setState((prevState: OrderState) => {
+          await this.setState((prevState: OrderState) => {
             const errorMessage = `The discount % or amount of ${items.drugName} cannot be negative.`;
 
             if (!prevState.errorMessage.includes(errorMessage)) {
@@ -166,11 +119,32 @@ export class OrderInfo extends Component {
         }
       }
     }
-    return this.state.errorMessage.length == 0;
+    return this.state.errorMessage.length === 0;
   };
 
   goToPayment = async () => {
-    if (this.validateForNext()) {
+    if (await this.validateForNext()) {
+      let discountAmount: number = 0,
+        totalAmount: number = 0,
+        allTaxes: number = 0,
+        billAmount: number = 0;
+      for (const items of this.state.orderItems) {
+        discountAmount += items.discountAmount;
+        billAmount += items.netAmount;
+        totalAmount += items.totalPrice;
+        allTaxes += items.cgstAmount + items.sgstAmount;
+      }
+      this.setState({
+        cashReceipt: {
+          paymentType: "C",
+          billAmount: billAmount,
+          amountPaid: billAmount,
+          discountAmount: parseFloat(String(discountAmount)).toFixed(2),
+          totalAmount: totalAmount,
+          receiptType: "PH",
+        },
+      });
+
       this.setState({ showPayment: true });
     }
   };
@@ -251,11 +225,18 @@ export class OrderInfo extends Component {
               String(item.quantity * item.unitPrice - discountAmount)
             ).toFixed(2)
           );
+          discountPerc = discountPerc
+            ? Number(parseFloat(String(discountPerc)).toFixed(2))
+            : 0.0;
+
+          discountAmount = discountAmount
+            ? Number(parseFloat(String(discountAmount)).toFixed(2))
+            : 0.0;
 
           return {
             ...item,
-            discountPerc: discountPerc,
-            discountAmount: discountAmount,
+            discountPerc: parseFloat(String(discountPerc)).toFixed(2),
+            discountAmount: parseFloat(String(discountAmount)).toFixed(2),
             totalPrice: totalPrice,
             netAmount: Number(
               parseFloat(
@@ -294,10 +275,58 @@ export class OrderInfo extends Component {
     );
   };
 
+  submitOrderInfo() {
+    axios
+      .post(PHARMACY_HOST_NAME + EndPoints.ORDER_CREATE, {
+        orderInfo: this.state.orderInfo,
+        orderItems: this.state.orderItems,
+        cashReceipt: this.state.cashReceipt,
+        uhid: this.patientHeaderContext.uhid,
+      })
+      .then((res) => {
+        console.log(res);
+        this.setState({ ...this.state, openSnackBar: true });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  handleClose =
+    () =>
+    (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+      this.setState({ ...this.state, openSnackbar: false });
+    };
+
   render() {
     return (
       <div key={"main-order-page"}>
-        {this.state.errorMessage.length}
+        {this.state.openSnackBar}
+        <Snackbar
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={this.state.openSnackBar}
+          transitionDuration={800}
+          autoHideDuration={4000}
+          onClose={this.handleClose}
+          ContentProps={{
+            sx: {
+              backgroundColor: "primary.light",
+              color: "primary.contrastText",
+            },
+          }}
+        >
+          <Alert
+            onClose={this.handleClose}
+            variant="filled"
+            severity={SnackBarTypeEnum.SUCCESS}
+          >
+            Order saved successfully.
+          </Alert>
+        </Snackbar>
+
         {this.state.errorMessage.length > 0 &&
           this.state.errorMessage.map((message, index) => {
             return (
@@ -573,10 +602,7 @@ export class OrderInfo extends Component {
               <Button
                 variant="contained"
                 style={{ margin: 5 }}
-                onClick={() => {
-                  console.log(this.state);
-                  console.log(this.state.cashReceipt);
-                }}
+                onClick={() => this.submitOrderInfo()}
               >
                 Submit
               </Button>

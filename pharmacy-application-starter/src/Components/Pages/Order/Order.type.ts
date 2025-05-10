@@ -64,13 +64,16 @@ export type CashReceipt = {
   referenceNumber: string;
   discountPerc: number;
   discountAmount: number;
+  totalAmount: number;
+  taxes: number;
+  receiptType: string;
 };
 
 export const initialCashReceipt: CashReceipt = {
   transactionId: "",
   billNumber: "",
   amountPaid: 0.0,
-  paymentType: "",
+  paymentType: "C",
   bankName: "",
   billAmount: 0.0,
   notes: "",
@@ -79,6 +82,9 @@ export const initialCashReceipt: CashReceipt = {
   referenceNumber: "",
   discountPerc: 0.0,
   discountAmount: 0.0,
+  totalAmount: 0.0,
+  taxes: 0.0,
+  receiptType:"PH"
 };
 
 export type OrderRequest = {
@@ -92,4 +98,69 @@ export type OrderState = {
   orderItems: OrderItems[];
   showPayment: boolean;
   errorMessage: string[];
+  openSnackBar:boolean;
 };
+
+export const initialOrderState: OrderState = {
+  orderInfo: {
+    orderNumber: "",
+    sequenceNumber: "",
+    billNumber: "",
+    transactionId: "",
+    orderDate: new Date(),
+    lastModifiedDate: new Date(),
+    uhid: 0,
+    status: "",
+    amountPaid: 0,
+    dueAmount: 0,
+    createdBy: "",
+    lastModifiedBy: "",
+    orderDetails: [],
+  },
+  cashReceipt: initialCashReceipt,
+  orderItems: [],
+  showPayment: false,
+  errorMessage: [],
+  openSnackBar: false
+};
+
+export const orderInfoColumnDefs: any[] = [
+  {
+    field: "drugName",
+    fieldValue: "Drug Name",
+  },
+  {
+    field: "quantity",
+    fieldValue: "Quantity",
+  },
+  {
+    field: "unitPrice",
+    fieldValue: "Unit Price",
+  },
+  {
+    field: "totalPrice",
+    fieldValue: "Total Price",
+  },
+  {
+    field: "discountPerc",
+    fieldValue: "Discount %",
+  },
+  {
+    field: "discountAmount",
+    fieldValue: "Discount Amt",
+  },
+  {
+    field: "taxes",
+    fieldValue: "Taxes",
+    cellRenderer: (params: any) => {
+      const taxes =
+        Number(params.data.sgstAmount) + Number(params.data.cgstAmount);
+      return `${taxes}`;
+    },
+  },
+
+  {
+    field: "netAmount",
+    fieldValue: "Net Amount",
+  },
+];
