@@ -36,7 +36,11 @@ import { SnackBarTypeEnum } from "../../common/GlobalTypes";
 import store from "../../Store/store";
 import { PatientHeaderContext } from "../../Header/PatientHeader.types";
 
-export class OrderInfo extends Component {
+interface OrderInfoProps {
+  navigateToSuccessPage?: (billInfo: any) => void;
+}
+
+class OrderInfo extends Component<OrderInfoProps> {
   state: OrderState = initialOrderState;
   columnDefs: any[] = orderInfoColumnDefs;
   patientHeaderContext: PatientHeaderContext = store.getState().patientReducer;
@@ -124,21 +128,26 @@ export class OrderInfo extends Component {
 
   goToPayment = async () => {
     if (await this.validateForNext()) {
-      let discountAmount: number = 0,
+      let discountPerc: number = 0,
+        discountAmount: number = 0,
         totalAmount: number = 0,
         allTaxes: number = 0,
         billAmount: number = 0;
       for (const items of this.state.orderItems) {
+        discountPerc += items.discountPerc;
         discountAmount += items.discountAmount;
         billAmount += items.netAmount;
         totalAmount += items.totalPrice;
         allTaxes += items.cgstAmount + items.sgstAmount;
       }
+      discountPerc = discountPerc / this.state.orderItems.length;
+
       this.setState({
         cashReceipt: {
           paymentType: "C",
           billAmount: billAmount,
           amountPaid: billAmount,
+          discountPerc: discountPerc,
           discountAmount: parseFloat(String(discountAmount)).toFixed(2),
           totalAmount: totalAmount,
           receiptType: "PH",
@@ -286,6 +295,9 @@ export class OrderInfo extends Component {
       .then((res) => {
         console.log(res);
         this.setState({ ...this.state, openSnackBar: true });
+        if (this.props.navigateToSuccessPage) {
+          this.props.navigateToSuccessPage(res?.data?.cashReceiptResponse);
+        }
       })
       .catch((err) => {
         console.log(err);

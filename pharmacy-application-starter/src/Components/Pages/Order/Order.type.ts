@@ -84,7 +84,7 @@ export const initialCashReceipt: CashReceipt = {
   discountAmount: 0.0,
   totalAmount: 0.0,
   taxes: 0.0,
-  receiptType:"PH"
+  receiptType: "PH",
 };
 
 export type OrderRequest = {
@@ -98,7 +98,7 @@ export type OrderState = {
   orderItems: OrderItems[];
   showPayment: boolean;
   errorMessage: string[];
-  openSnackBar:boolean;
+  openSnackBar: boolean;
 };
 
 export const initialOrderState: OrderState = {
@@ -121,7 +121,7 @@ export const initialOrderState: OrderState = {
   orderItems: [],
   showPayment: false,
   errorMessage: [],
-  openSnackBar: false
+  openSnackBar: false,
 };
 
 export const orderInfoColumnDefs: any[] = [

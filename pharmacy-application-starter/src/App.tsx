@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavigationBar from "./Components/NavBar/NavigationBar";
@@ -16,6 +15,7 @@ import SupplierSetup from "./Components/Pages/Setups/Supplier/SupplierSetup";
 import Inventory from "./Components/Pages/Inventory";
 import InventoryDetails from "./Components/Pages/Inventory/InventoryDetails";
 import Login from "./Components/Auth/Login";
+import OrderSuccessPage from "./Components/Pages/Order/OrderSuccessPage";
 
 function App() {
   console.log(sessionStorage.getItem("login"));
@@ -42,6 +42,7 @@ function App() {
               <Route path="/Setups/Drug/Dashboard" Component={DrugDashboard} />
               <Route path="/Setups/Drug/create" Component={DrugSetup} />
               <Route path="/Setups/Drug/update/:id" Component={DrugSetup} />
+              <Route path="/order/OrderSuccessPage" element={<OrderSuccessPage />} />
 
               <Route
                 path="/Setups/Supplier/Dashboard"
