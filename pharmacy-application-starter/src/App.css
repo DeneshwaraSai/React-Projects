@@ -13,7 +13,7 @@
 .inventory,
 .message,
 .order,
-.patientReg, .setups, .drug, .supplier {
+.patientReg, .setups, .drug, .supplier, .search {
   /* display: flex; */
   height: 90vh;
   /* align-items: center; */

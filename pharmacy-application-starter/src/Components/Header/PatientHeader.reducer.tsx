@@ -32,14 +32,14 @@ const PatientReducer = (
         billStatus: action.payload.billStatus,
         phoneNumber: action.payload.phoneNumber,
       };
-
+console.log(header)
       setSessionStorageWithPatientHeader("patientHeader", header);
 
       return header;
     case "clear":
       return {};
     default:
-      return state; //getSessionStorageWithPatientHeader("patientHeader");
+      return {};
   }
 };
 

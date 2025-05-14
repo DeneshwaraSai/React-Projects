@@ -10,11 +10,9 @@ import { CashReceipt } from "./Order/Order.type";
 function Order() {
   const navigate = useNavigate();
 
-  let patientHeaderContext: PatientHeaderContext =
-    store.getState().patientReducer;
+  let patientHeaderContext: PatientHeaderContext = store.getState().patientReducer;
   console.log(patientHeaderContext);
-
-  const handleSuccessPage = (orderBillInfo: CashReceipt) => {
+   const handleSuccessPage = (orderBillInfo: CashReceipt) => {
     console.log(orderBillInfo);
     navigate("/Order/OrderSuccessPage", {
       state: {
@@ -25,7 +23,7 @@ function Order() {
     });
   };
 
-  if (patientHeaderContext) {
+  if (patientHeaderContext?.firstName) {
     return (
       <div className="order">
         <PatientHeader patientHeader={patientHeaderContext} />
@@ -36,7 +34,7 @@ function Order() {
     return (
       <div className="order">
         <SearchPatient />
-        <OrderInfo navigateToSuccessPage={handleSuccessPage} />
+        {/* <OrderInfo navigateToSuccessPage={handleSuccessPage} /> */}
       </div>
     );
   }

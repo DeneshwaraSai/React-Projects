@@ -1,5 +1,6 @@
 export const PHARMACY_HOST_NAME = "http://localhost:8080";
 
+export const PATIENT_SEARCH_PATH = "/patient-search/SearchPatient"
 export class EndPoints {
   static PATIENT_SAVE = "/patient/save";
   static PATIENT_UPDATE = "/patient/update";
@@ -7,6 +8,7 @@ export class EndPoints {
   static FIND_PATIENT_HEADER_BY_UHID = "/patient/uhid/{uhid}";
   static SEARCH_PATIENT_BY_NAME = "/patient/search/{value}";
   static PATIENT_LIST = "/patient/list";
+  static PATIENT_ADVANCED_SEARCH = "/patient/advancedSearch"
 
   static GET_TAX_CATEGORY = "/taxCategory/list";
 

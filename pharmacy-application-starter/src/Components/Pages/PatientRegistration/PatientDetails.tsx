@@ -16,8 +16,14 @@ import { Patient } from "./patient.type";
 import axios from "axios";
 import { EndPoints, PHARMACY_HOST_NAME } from "../../common/endPoints";
 import { ErrorMessage, SnackbarType } from "../../common/GlobalTypes";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { patientHeaderAction } from "../../Header/PatientHeader.actions";
 
 function PatientDetails() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const snackbarInitialState: SnackbarType = {
     show: false,
     type: "info",
@@ -130,7 +136,7 @@ function PatientDetails() {
 
     if (validatePatient() === true) {
       axios
-        .post("http://localhost:8080" + EndPoints.PATIENT_SAVE, patient)
+        .post(PHARMACY_HOST_NAME + EndPoints.PATIENT_SAVE, patient)
         .then((response) => {
           console.log(response);
 
@@ -139,6 +145,20 @@ function PatientDetails() {
             type: "success",
             message: "Patient saved successfully.",
           });
+
+          axios
+            .get(
+              PHARMACY_HOST_NAME +
+                EndPoints.FIND_PATIENT_HEADER_BY_UHID.replace(
+                  "{uhid}",
+                  `${response.data.uhid}`
+                )
+            )
+            .then((res) => {
+              dispatch(patientHeaderAction(res.data));
+              navigate("/order");
+            })
+            .catch((err) => {});
 
           // create context
         })
