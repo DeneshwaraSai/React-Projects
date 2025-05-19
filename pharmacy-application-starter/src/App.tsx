@@ -17,6 +17,7 @@ import InventoryDetails from "./Components/Pages/Inventory/InventoryDetails";
 import Login from "./Components/Auth/Login";
 import OrderSuccessPage from "./Components/Pages/Order/OrderSuccessPage";
 import SearchPatient from "./Components/Pages/patient-search/searchPatient";
+import BillDashboard from "./Components/Pages/BillDashboard";
 
 function App() {
   console.log(sessionStorage.getItem("login"));
@@ -39,6 +40,8 @@ function App() {
               <Route path="/inventory" Component={Inventory} />
               <Route path="/order" Component={Order} />
               <Route path="/patient-search/SearchPatient" Component={SearchPatient} />
+
+              <Route path="/billDashboard" Component={BillDashboard} />
 
               <Route path="/Setups" Component={setups} />
               <Route path="/Setups/Drug/Dashboard" Component={DrugDashboard} />

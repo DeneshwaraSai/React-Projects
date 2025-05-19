@@ -133,23 +133,26 @@ class OrderInfo extends Component<OrderInfoProps> {
         totalAmount: number = 0,
         allTaxes: number = 0,
         billAmount: number = 0;
+      console.log(this.state.orderItems);
       for (const items of this.state.orderItems) {
-        discountPerc += items.discountPerc;
-        discountAmount += items.discountAmount;
-        billAmount += items.netAmount;
-        totalAmount += items.totalPrice;
-        allTaxes += items.cgstAmount + items.sgstAmount;
+        discountPerc += Number(items.discountPerc);
+        discountAmount += Number(items.discountAmount);
+        billAmount += Number(items.netAmount);
+        totalAmount += Number(items.totalPrice);
+        allTaxes += Number(items.cgstAmount + items.sgstAmount);
       }
       discountPerc = discountPerc / this.state.orderItems.length;
-
+      console.log(discountPerc);
+      console.log(this.state.orderItems.length);
+      console.log(discountPerc / this.state.orderItems.length);
       this.setState({
         cashReceipt: {
           paymentType: "C",
-          billAmount: billAmount,
-          amountPaid: billAmount,
+          billAmount: parseFloat(String(billAmount)).toFixed(2),
+          amountPaid: parseFloat(String(billAmount)).toFixed(2),
           discountPerc: discountPerc,
           discountAmount: parseFloat(String(discountAmount)).toFixed(2),
-          totalAmount: totalAmount,
+          totalAmount: parseFloat(String(totalAmount)).toFixed(2),
           receiptType: "PH",
         },
       });

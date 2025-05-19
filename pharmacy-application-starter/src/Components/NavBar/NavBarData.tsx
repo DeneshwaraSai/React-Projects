@@ -1,6 +1,8 @@
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
 import * as MdIcons from "react-icons/md";
+import * as FaIcons  from "react-icons/fa";
+
 import { NavigationType } from "./NavigationTypes";
 
 export const SideBarData: NavigationType[] = [
@@ -30,6 +32,13 @@ export const SideBarData: NavigationType[] = [
     resourceId: "",
     path: "/order",
     icon: <MdIcons.MdLocalPharmacy />,
+    cName: "nav-text",
+  },
+  {
+    title: "Bill Dashboard",
+    resourceId: "",
+    path: "/billDashboard",
+    icon: <FaIcons.FaMoneyBillAlt />,
     cName: "nav-text",
   },
   {
