@@ -9,7 +9,13 @@ export type PatientHeaderContext = {
   orderStatus: string;
   billStatus: string;
   phoneNumber: string;
+  // pharmacyContent: PharmaContent;
 };
+
+export type PharmaContent = {
+
+}
+
 
 export type PatientAction = {
   type: string;

@@ -18,6 +18,7 @@ import Login from "./Components/Auth/Login";
 import OrderSuccessPage from "./Components/Pages/Order/OrderSuccessPage";
 import SearchPatient from "./Components/Pages/patient-search/searchPatient";
 import BillDashboard from "./Components/Pages/BillDashboard";
+import ReturnsPage from "./Components/Pages/ReturnsPage";
 
 function App() {
   console.log(sessionStorage.getItem("login"));
@@ -39,15 +40,22 @@ function App() {
               <Route path="/PatientRegistration" Component={PatientReg} />
               <Route path="/inventory" Component={Inventory} />
               <Route path="/order" Component={Order} />
-              <Route path="/patient-search/SearchPatient" Component={SearchPatient} />
+              <Route
+                path="/patient-search/SearchPatient"
+                Component={SearchPatient}
+              />
 
               <Route path="/billDashboard" Component={BillDashboard} />
+              <Route path="/returns" Component={ReturnsPage} />
 
               <Route path="/Setups" Component={setups} />
               <Route path="/Setups/Drug/Dashboard" Component={DrugDashboard} />
               <Route path="/Setups/Drug/create" Component={DrugSetup} />
               <Route path="/Setups/Drug/update/:id" Component={DrugSetup} />
-              <Route path="/order/OrderSuccessPage" element={<OrderSuccessPage />} />
+              <Route
+                path="/order/OrderSuccessPage"
+                element={<OrderSuccessPage />}
+              />
 
               <Route
                 path="/Setups/Supplier/Dashboard"
@@ -68,7 +76,6 @@ function App() {
           </Router>
         )}
       </Provider>
-     
     </>
   );
 }

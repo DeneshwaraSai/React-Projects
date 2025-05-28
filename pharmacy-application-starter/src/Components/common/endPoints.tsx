@@ -36,4 +36,6 @@ export class EndPoints {
   static ORDER_UPDATE = "/order/update";
   static ORDER_FIND_BY_ORDERNUMBER = "/order/{orderNumber}";
   static INVENTORY_ORDER_SEARCH = "/inventory/order/search/{name}";
+
+  static PHARMACY_PATIENT_CONTEXT = '/order/pharmaContext';
 }

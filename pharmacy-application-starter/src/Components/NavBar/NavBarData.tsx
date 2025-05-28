@@ -34,6 +34,13 @@ export const SideBarData: NavigationType[] = [
     icon: <MdIcons.MdLocalPharmacy />,
     cName: "nav-text",
   },
+ {
+    title: "Returns",
+    resourceId: "",
+    path: "/returns",
+    icon: <MdIcons.MdKeyboardReturn />,
+    cName: "nav-text",
+  },
   {
     title: "Bill Dashboard",
     resourceId: "",
